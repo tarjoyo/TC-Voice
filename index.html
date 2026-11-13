@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TC Voice Ads ID</title>
+    <title>TC Voice Ads – AI Voice Generator</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -84,6 +84,14 @@
         }
         .animate-toast-pop {
             animation: toastPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes audioWavePulse {
+            0%, 100% { transform: scaleY(0.25); }
+            50% { transform: scaleY(1); }
+        }
+        .hero-wave-line {
+            transform-origin: center;
+            animation: audioWavePulse 1.1s ease-in-out infinite;
         }
         /* Sidebar smooth transition */
         #app-sidebar {
@@ -222,8 +230,113 @@
             <section id="tab-dashboard" class="space-y-8">
                 <!-- Hero Banner -->
                 <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-800 p-6 sm:p-8 shadow-2xl">
-                    <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-brand-red/15 rounded-full blur-3xl pointer-events-none"></div>
-                    <div class="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+                    <div class="absolute -left-10 -bottom-10 w-72 h-72 bg-brand-red/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="flex flex-col lg:flex-row items-center justify-start gap-8 relative z-10">
+                        <!-- Visual Ilustrasi Studio AI Voice Over (Posisi Paling Kiri) -->
+                        <div class="shrink-0 flex items-center justify-center w-full lg:w-auto">
+                            <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-gradient-to-b from-slate-900/95 to-slate-950 border border-slate-700/70 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center justify-between p-5 backdrop-blur-md group hover:border-brand-red/60 transition-all duration-300 overflow-hidden">
+                                <!-- Efek Cahaya Neon Belakang -->
+                                <div class="absolute -top-12 -left-12 w-40 h-40 bg-brand-red/25 rounded-full blur-2xl pointer-events-none group-hover:bg-brand-red/35 transition"></div>
+                                <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+                                <!-- Header Mini Studio Window -->
+                                <div class="w-full flex items-center justify-between z-10">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Ilustrasi SVG Studio Condenser Mic + Laptop + Soundwave -->
+                                <svg class="w-44 h-40 drop-shadow-[0_12px_28px_rgba(229,9,20,0.45)] group-hover:scale-105 transition-transform duration-300 z-10" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="studioMicBody" x1="92" y1="26" x2="148" y2="112" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#FF4D5E"/>
+                                            <stop offset="50%" stop-color="#E50914"/>
+                                            <stop offset="100%" stop-color="#88040B"/>
+                                        </linearGradient>
+                                        <linearGradient id="ringGlow" x1="50" y1="20" x2="190" y2="150" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#F43F5E" stop-opacity="0.6"/>
+                                            <stop offset="50%" stop-color="#818CF8" stop-opacity="0.3"/>
+                                            <stop offset="100%" stop-color="#E50914" stop-opacity="0.6"/>
+                                        </linearGradient>
+                                        <linearGradient id="metalStand" x1="120" y1="108" x2="120" y2="178" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#CBD5E1"/>
+                                            <stop offset="100%" stop-color="#475569"/>
+                                        </linearGradient>
+                                        <linearGradient id="waveGrad" x1="20" y1="70" x2="220" y2="70" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#38BDF8"/>
+                                            <stop offset="50%" stop-color="#F43F5E"/>
+                                            <stop offset="100%" stop-color="#A855F7"/>
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Lingkaran Orbit Studio -->
+                                    <circle cx="120" cy="76" r="68" stroke="url(#ringGlow)" stroke-width="1.5" stroke-dasharray="5 5"/>
+                                    <circle cx="120" cy="76" r="52" stroke="#F43F5E" stroke-opacity="0.22" stroke-width="1.5"/>
+
+                                    <!-- Gelombang Frekuensi Audio Kiri -->
+                                    <rect x="20" y="68" width="4" height="18" rx="2" fill="#38BDF8" opacity="0.8"/>
+                                    <rect x="29" y="56" width="4" height="42" rx="2" fill="#818CF8" opacity="0.9"/>
+                                    <rect x="38" y="48" width="4" height="58" rx="2" fill="#F43F5E"/>
+                                    <rect x="47" y="60" width="4" height="34" rx="2" fill="#FB7185" opacity="0.85"/>
+                                    <rect x="56" y="66" width="4" height="22" rx="2" fill="#FDA4AF" opacity="0.7"/>
+
+                                    <!-- Gelombang Frekuensi Audio Kanan -->
+                                    <rect x="180" y="66" width="4" height="22" rx="2" fill="#FDA4AF" opacity="0.7"/>
+                                    <rect x="189" y="60" width="4" height="34" rx="2" fill="#FB7185" opacity="0.85"/>
+                                    <rect x="198" y="48" width="4" height="58" rx="2" fill="#F43F5E"/>
+                                    <rect x="207" y="56" width="4" height="42" rx="2" fill="#A855F7" opacity="0.9"/>
+                                    <rect x="216" y="68" width="4" height="18" rx="2" fill="#38BDF8" opacity="0.8"/>
+
+                                    <!-- Badan Mikrofon Kondensor -->
+                                    <rect x="96" y="28" width="48" height="82" rx="24" fill="url(#studioMicBody)"/>
+                                    <!-- Jaring / Mesh Kapsul -->
+                                    <line x1="104" y1="48" x2="136" y2="48" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="102" y1="60" x2="138" y2="60" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="102" y1="72" x2="138" y2="72" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="104" y1="84" x2="136" y2="84" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
+                                    <!-- Highlight Kilau 3D -->
+                                    <rect x="104" y="36" width="6" height="44" rx="3" fill="#FFFFFF" fill-opacity="0.28"/>
+
+                                    <!-- Shockmount & Penyangga Mikrofon -->
+                                    <path d="M80 78C80 100.091 97.9086 118 120 118C142.091 118 160 100.091 160 78" stroke="url(#metalStand)" stroke-width="5.5" stroke-linecap="round"/>
+                                    <line x1="120" y1="118" x2="120" y2="154" stroke="url(#metalStand)" stroke-width="5.5" stroke-linecap="round"/>
+                                    <!-- Base Meja Studio -->
+                                    <rect x="86" y="152" width="68" height="9" rx="4.5" fill="#64748B"/>
+                                    <rect x="96" y="148" width="48" height="5" rx="2.5" fill="#94A3B8"/>
+
+                                    <!-- Sparkle AI Bintang -->
+                                    <path d="M168 32L170.5 38.5L177 41L170.5 43.5L168 50L165.5 43.5L159 41L165.5 38.5L168 32Z" fill="#FBBF24"/>
+                                    <path d="M72 26L73.5 30L77.5 31.5L73.5 33L72 37L70.5 33L66.5 31.5L70.5 30L72 26Z" fill="#38BDF8"/>
+                                </svg>
+
+                                <!-- Animasi Bergerak Waveform Garis Audio -->
+                                <div class="w-full h-11 flex items-center justify-center gap-1 px-3 z-10" aria-hidden="true">
+                                    <span class="w-1 h-4 rounded-full bg-gradient-to-t from-cyan-500 to-sky-300 hero-wave-line" style="animation-delay: 0.00s;"></span>
+                                    <span class="w-1 h-7 rounded-full bg-gradient-to-t from-indigo-500 to-cyan-300 hero-wave-line" style="animation-delay: 0.12s;"></span>
+                                    <span class="w-1 h-5 rounded-full bg-gradient-to-t from-rose-600 to-rose-400 hero-wave-line" style="animation-delay: 0.24s;"></span>
+                                    <span class="w-1 h-9 rounded-full bg-gradient-to-t from-brand-red to-rose-400 hero-wave-line" style="animation-delay: 0.36s;"></span>
+                                    <span class="w-1 h-6 rounded-full bg-gradient-to-t from-purple-500 to-pink-400 hero-wave-line" style="animation-delay: 0.48s;"></span>
+                                    <span class="w-1 h-10 rounded-full bg-gradient-to-t from-brand-red to-amber-300 hero-wave-line" style="animation-delay: 0.60s;"></span>
+                                    <span class="w-1 h-7 rounded-full bg-gradient-to-t from-rose-600 to-rose-300 hero-wave-line" style="animation-delay: 0.72s;"></span>
+                                    <span class="w-1 h-5 rounded-full bg-gradient-to-t from-indigo-500 to-purple-300 hero-wave-line" style="animation-delay: 0.84s;"></span>
+                                    <span class="w-1 h-9 rounded-full bg-gradient-to-t from-brand-red to-rose-400 hero-wave-line" style="animation-delay: 0.18s;"></span>
+                                    <span class="w-1 h-8 rounded-full bg-gradient-to-t from-cyan-500 to-blue-300 hero-wave-line" style="animation-delay: 0.30s;"></span>
+                                    <span class="w-1 h-10 rounded-full bg-gradient-to-t from-brand-red to-rose-300 hero-wave-line" style="animation-delay: 0.42s;"></span>
+                                    <span class="w-1 h-6 rounded-full bg-gradient-to-t from-purple-500 to-pink-300 hero-wave-line" style="animation-delay: 0.54s;"></span>
+                                    <span class="w-1 h-8 rounded-full bg-gradient-to-t from-rose-600 to-amber-300 hero-wave-line" style="animation-delay: 0.66s;"></span>
+                                    <span class="w-1 h-5 rounded-full bg-gradient-to-t from-indigo-500 to-cyan-300 hero-wave-line" style="animation-delay: 0.78s;"></span>
+                                    <span class="w-1 h-9 rounded-full bg-gradient-to-t from-brand-red to-rose-400 hero-wave-line" style="animation-delay: 0.90s;"></span>
+                                    <span class="w-1 h-6 rounded-full bg-gradient-to-t from-rose-600 to-pink-400 hero-wave-line" style="animation-delay: 0.15s;"></span>
+                                    <span class="w-1 h-7 rounded-full bg-gradient-to-t from-indigo-500 to-cyan-300 hero-wave-line" style="animation-delay: 0.27s;"></span>
+                                    <span class="w-1 h-4 rounded-full bg-gradient-to-t from-cyan-500 to-sky-300 hero-wave-line" style="animation-delay: 0.39s;"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Konten Teks Banner di Sebelah Kanan -->
                         <div class="max-w-2xl space-y-4">
                             <span class="bg-brand-red/20 text-brand-red text-xs px-3 py-1 rounded-full font-semibold border border-brand-red/30 inline-flex items-center gap-1.5">
                                 <i class="fa-solid fa-sparkles"></i> AI Voice Generator Pro 2026
@@ -241,68 +354,6 @@
                                 <button onclick="switchTab('script-ai')" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
                                     <i class="fa-solid fa-pen-sparkles text-amber-400"></i> Buat Script Otomatis AI
                                 </button>
-                            </div>
-                        </div>
-
-                        <!-- Visual Ilustrasi Mikrofon Studio & AI Audio Wave -->
-                        <div class="shrink-0 flex items-center justify-center w-full lg:w-auto">
-                            <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-slate-950/80 border border-slate-700/60 shadow-2xl flex flex-col items-center justify-center p-6 backdrop-blur-md group hover:border-brand-red/50 transition-all duration-300">
-                                <!-- Efek Cahaya Belakang -->
-                                <div class="absolute inset-0 bg-gradient-to-tr from-brand-red/15 via-transparent to-rose-500/10 rounded-3xl pointer-events-none"></div>
-                                
-                                <!-- Ilustrasi SVG Mikrofon Studio & Gelombang Suara -->
-                                <svg class="w-36 h-36 drop-shadow-[0_10px_25px_rgba(229,9,20,0.45)] group-hover:scale-105 transition-transform duration-300" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <defs>
-                                        <linearGradient id="micGrad" x1="65" y1="30" x2="135" y2="120" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0%" stop-color="#FF3B4E"/>
-                                            <stop offset="100%" stop-color="#B80710"/>
-                                        </linearGradient>
-                                        <linearGradient id="standGrad" x1="100" y1="115" x2="100" y2="175" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0%" stop-color="#94A3B8"/>
-                                            <stop offset="100%" stop-color="#475569"/>
-                                        </linearGradient>
-                                    </defs>
-
-                                    <!-- Lingkaran Radar Gelombang Suara -->
-                                    <circle cx="100" cy="80" r="68" stroke="#E50914" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="6 6"/>
-                                    <circle cx="100" cy="80" r="52" stroke="#F43F5E" stroke-opacity="0.28" stroke-width="1.5"/>
-
-                                    <!-- Gelombang Suara Kiri -->
-                                    <rect x="24" y="68" width="4" height="24" rx="2" fill="#F43F5E" opacity="0.7"/>
-                                    <rect x="33" y="58" width="4" height="44" rx="2" fill="#E50914" opacity="0.9"/>
-                                    <rect x="42" y="64" width="4" height="32" rx="2" fill="#FB7185" opacity="0.8"/>
-
-                                    <!-- Gelombang Suara Kanan -->
-                                    <rect x="154" y="64" width="4" height="32" rx="2" fill="#FB7185" opacity="0.8"/>
-                                    <rect x="163" y="58" width="4" height="44" rx="2" fill="#E50914" opacity="0.9"/>
-                                    <rect x="172" y="68" width="4" height="24" rx="2" fill="#F43F5E" opacity="0.7"/>
-
-                                    <!-- Kapsul Mikrofon Utama -->
-                                    <rect x="76" y="34" width="48" height="82" rx="24" fill="url(#micGrad)"/>
-                                    <!-- Detail Grill Mikrofon -->
-                                    <line x1="84" y1="54" x2="116" y2="54" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
-                                    <line x1="82" y1="66" x2="118" y2="66" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
-                                    <line x1="82" y1="78" x2="118" y2="78" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
-                                    <line x1="84" y1="90" x2="116" y2="90" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
-                                    <!-- Kilauan Kaca Kapsul -->
-                                    <rect x="84" y="42" width="6" height="42" rx="3" fill="#FFFFFF" fill-opacity="0.22"/>
-
-                                    <!-- Penyangga / Stand Mikrofon -->
-                                    <path d="M62 84C62 104.987 79.0132 122 100 122C120.987 122 138 104.987 138 84" stroke="url(#standGrad)" stroke-width="6" stroke-linecap="round"/>
-                                    <line x1="100" y1="122" x2="100" y2="156" stroke="url(#standGrad)" stroke-width="6" stroke-linecap="round"/>
-                                    <rect x="72" y="154" width="56" height="8" rx="4" fill="#64748B"/>
-                                </svg>
-
-                                <!-- Lencana Audio Studio di Bawah Ilustrasi -->
-                                <div class="mt-2 flex items-center gap-2 bg-slate-900/90 border border-slate-800 px-3.5 py-1.5 rounded-full shadow-inner">
-                                    <span class="flex items-end gap-0.5 h-3">
-                                        <span class="w-1 h-2 bg-brand-red rounded-full animate-pulse"></span>
-                                        <span class="w-1 h-3 bg-rose-400 rounded-full animate-bounce"></span>
-                                        <span class="w-1 h-1.5 bg-brand-red rounded-full animate-pulse"></span>
-                                        <span class="w-1 h-2.5 bg-rose-400 rounded-full animate-bounce"></span>
-                                    </span>
-                                    <span class="text-[11px] font-bold tracking-wide text-slate-200">16 AI Studio Voices</span>
-                                </div>
                             </div>
                         </div>
                     </div>
