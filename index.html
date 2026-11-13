@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TC Voice Ads ID</title>
+    <title>TC Voice Ads – AI Voice Generator</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -2199,27 +2199,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
             let audioSource = item.audioBase64;
 
-            // Jika format base64 tersimpan tapi belum ada prefix data:audio/wav, tambahkan dengan aman
-            if (audioSource && !audioSource.startsWith('data:')) {
-                audioSource = 'data:audio/wav;base64,' + audioSource;
-            }
-
-            if (!audioSource && item.audioUrl) {
-                audioSource = item.audioUrl;
-            }
-
-            if (!audioSource) {
-                if (item.fullScript) {
-                    document.getElementById('ad-script-input').value = item.fullScript;
-                    updateScriptStats();
-                    switchTab('generator');
-                    showToast("Audio tidak tersimpan di lokal. Script dimuat kembali ke Generator!", "info");
-                } else {
-                    showToast("File audio tidak tersedia.", "warning");
-                }
-                return;
-            }
-
             if (currentHistoryAudio && String(currentPlayingHistoryId) === String(id)) {
                 stopHistoryAudio();
                 return;
@@ -2228,23 +2207,36 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             stopHistoryAudio();
 
             try {
-                // Konversi Base64 DataURI menjadi Blob URL murni agar kompatibel dengan pemutar audio HTML5
-                let playableUrl = audioSource;
-                if (audioSource.startsWith('data:')) {
-                    const arr = audioSource.split(',');
-                    const mimeMatch = arr[0].match(/:(.*?);/);
-                    const mime = mimeMatch ? mimeMatch[1] : 'audio/wav';
-                    const bstr = atob(arr[1]);
-                    let n = bstr.length;
-                    const u8arr = new Uint8Array(n);
-                    while (n--) {
-                        u8arr[n] = bstr.charCodeAt(n);
+                let playableUrl = "";
+
+                if (audioSource) {
+                    if (audioSource.startsWith('data:')) {
+                        playableUrl = audioSource;
+                    } else if (audioSource.startsWith('RIFF') || audioSource.length > 100) {
+                        // Jika tersimpan sebagai raw string / binary base64
+                        const blob = new Blob([base64ToArrayBuffer(audioSource)], { type: 'audio/wav' });
+                        playableUrl = URL.createObjectURL(blob);
+                    } else {
+                        playableUrl = 'data:audio/wav;base64,' + audioSource;
                     }
-                    const blob = new Blob([u8arr], { type: mime });
-                    playableUrl = URL.createObjectURL(blob);
+                } else if (item.audioUrl) {
+                    playableUrl = item.audioUrl;
                 }
 
-                currentHistoryAudio = new Audio(playableUrl);
+                if (!playableUrl) {
+                    if (item.fullScript) {
+                        document.getElementById('ad-script-input').value = item.fullScript;
+                        updateScriptStats();
+                        switchTab('generator');
+                        showToast("Audio lokal tidak ditemukan. Script dimuat kembali ke Generator!", "info");
+                    } else {
+                        showToast("File audio tidak tersedia.", "warning");
+                    }
+                    return;
+                }
+
+                currentHistoryAudio = new Audio();
+                currentHistoryAudio.crossOrigin = "anonymous";
                 currentPlayingHistoryId = id;
 
                 const btn = document.getElementById(`btn-play-hist-${id}`);
@@ -2254,16 +2246,39 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                     stopHistoryAudio();
                 };
 
-                currentHistoryAudio.onerror = (e) => {
-                    console.error("Audio playback error:", e);
-                    stopHistoryAudio();
-                    showToast("Gagal memutar audio. Format mungkin tidak didukung langsung oleh browser.", "error");
+                currentHistoryAudio.onerror = async (e) => {
+                    console.warn("Fallback HTML5 Audio, mencoba decode via Web Audio Context...", e);
+                    try {
+                        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        const response = await fetch(playableUrl);
+                        const arrayBuffer = await response.arrayBuffer();
+                        const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                        
+                        currentAudioBuffer = decodedBuffer;
+                        playAudioBuffer();
+                        currentPlayingHistoryId = id;
+                        if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i> <span>Stop</span>';
+                        return;
+                    } catch (err2) {
+                        console.error("Semua metode pemutaran gagal:", err2);
+                        stopHistoryAudio();
+                        if (item.fullScript) {
+                            document.getElementById('ad-script-input').value = item.fullScript;
+                            updateScriptStats();
+                            switchTab('generator');
+                            showToast("Format audio lama tidak dapat diputar. Script dimuat kembali ke Generator.", "warning");
+                        } else {
+                            showToast("Gagal memutar audio.", "error");
+                        }
+                    }
                 };
 
+                currentHistoryAudio.src = playableUrl;
                 await currentHistoryAudio.play();
                 showToast(`Memutar audio: "${item.title}"`, "info");
             } catch (e) {
                 console.error(e);
+                stopHistoryAudio();
                 showToast("Gagal memutar audio.", "error");
             }
         }
@@ -2274,6 +2289,11 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                 currentHistoryAudio.currentTime = 0;
                 currentHistoryAudio = null;
             }
+            if (audioSourceNode) {
+                try { audioSourceNode.stop(); } catch(e){}
+                audioSourceNode = null;
+            }
+            isPlaying = false;
             if (currentPlayingHistoryId) {
                 const prevBtn = document.getElementById(`btn-play-hist-${currentPlayingHistoryId}`);
                 if (prevBtn) prevBtn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
