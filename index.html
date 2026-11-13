@@ -2165,7 +2165,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                         <div class="font-semibold text-slate-100">${h.title}</div>
                         <div class="mt-1 flex items-center gap-2">
                             ${h.audioBase64 ? '<span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-1.5 py-0.5 rounded"><i class="fa-solid fa-check"></i> Audio Siap</span>' : ''}
-                            ${h.audioUrl ? `<a href="${h.audioUrl}" target="_blank" class="text-[10px] text-cyan-400 hover:underline"><i class="fa-brands fa-google-drive"></i> Drive Link</a>` : ''}
                         </div>
                     </td>
                     <td class="p-3"><span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[10px]">${h.voice}</span></td>
@@ -2173,9 +2172,9 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                     <td class="p-3 text-slate-400 text-[11px]">${h.date}</td>
                     <td class="p-3 text-right">
                         <div class="inline-flex items-center gap-2">
-                            <button onclick="playHistoryAudio(${h.id})" id="btn-play-hist-${h.id}" class="px-2.5 py-1.5 rounded-lg ${hasPlayable ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-800/60' : 'bg-slate-800 text-slate-400'} transition flex items-center gap-1 text-[11px] font-semibold" title="${hasPlayable ? 'Putar Audio' : 'Muat Script'}">
-                                <i class="fa-solid ${hasPlayable ? 'fa-play' : 'fa-arrow-up-right-from-square'}"></i>
-                                <span>${hasPlayable ? 'Play' : 'Muat'}</span>
+                            <button onclick="playHistoryAudio(${h.id})" id="btn-play-hist-${h.id}" class="px-2.5 py-1.5 rounded-lg ${hasPlayable ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-800/60' : 'bg-slate-800 text-slate-400'} transition flex items-center gap-1 text-[11px] font-semibold" title="Putar Audio">
+                                <i class="fa-solid fa-play"></i>
+                                <span>Play</span>
                             </button>
                             ${hasPlayable ? `
                             <button onclick="downloadHistoryAudio(${h.id})" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 transition flex items-center gap-1 text-[11px] font-semibold" title="Download Audio">
@@ -2194,20 +2193,29 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
         let currentHistoryAudio = null;
         let currentPlayingHistoryId = null;
 
-        function playHistoryAudio(id) {
+        async function playHistoryAudio(id) {
             const item = historyData.find(h => String(h.id) === String(id));
             if (!item) return;
 
-            const audioSource = item.audioBase64 || item.audioUrl;
+            let audioSource = item.audioBase64;
+
+            // Jika format base64 tersimpan tapi belum ada prefix data:audio/wav, tambahkan dengan aman
+            if (audioSource && !audioSource.startsWith('data:')) {
+                audioSource = 'data:audio/wav;base64,' + audioSource;
+            }
+
+            if (!audioSource && item.audioUrl) {
+                audioSource = item.audioUrl;
+            }
 
             if (!audioSource) {
                 if (item.fullScript) {
                     document.getElementById('ad-script-input').value = item.fullScript;
                     updateScriptStats();
                     switchTab('generator');
-                    showToast("Audio belum tersimpan. Script dimuat ke Generator untuk dibuat ulang!", "info");
+                    showToast("Audio tidak tersimpan di lokal. Script dimuat kembali ke Generator!", "info");
                 } else {
-                    showToast("File audio tidak tersedia dalam riwayat ini.", "warning");
+                    showToast("File audio tidak tersedia.", "warning");
                 }
                 return;
             }
@@ -2220,66 +2228,43 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             stopHistoryAudio();
 
             try {
+                // Konversi Base64 DataURI menjadi Blob URL murni agar kompatibel dengan pemutar audio HTML5
+                let playableUrl = audioSource;
+                if (audioSource.startsWith('data:')) {
+                    const arr = audioSource.split(',');
+                    const mimeMatch = arr[0].match(/:(.*?);/);
+                    const mime = mimeMatch ? mimeMatch[1] : 'audio/wav';
+                    const bstr = atob(arr[1]);
+                    let n = bstr.length;
+                    const u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    const blob = new Blob([u8arr], { type: mime });
+                    playableUrl = URL.createObjectURL(blob);
+                }
+
+                currentHistoryAudio = new Audio(playableUrl);
                 currentPlayingHistoryId = id;
+
                 const btn = document.getElementById(`btn-play-hist-${id}`);
                 if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i> <span>Stop</span>';
-
-                let playableUrl = audioSource;
-
-                // Jika berupa base64 murni tanpa prefix data URI, tambahkan data URI prefix
-                if (item.audioBase64 && !item.audioBase64.startsWith('data:')) {
-                    playableUrl = `data:audio/wav;base64,${item.audioBase64}`;
-                }
-
-                // Jika base64, ubah menjadi Blob URL untuk kompatibilitas pemutar audio browser yang lebih handal
-                if (playableUrl.startsWith('data:audio/')) {
-                    try {
-                        const parts = playableUrl.split(',');
-                        const mimeMatch = parts[0].match(/:(.*?);/);
-                        const mimeType = mimeMatch ? mimeMatch[1] : 'audio/wav';
-                        const binaryString = atob(parts[1]);
-                        const len = binaryString.length;
-                        const bytes = new Uint8Array(len);
-                        for (let i = 0; i < len; i++) {
-                            bytes[i] = binaryString.charCodeAt(i);
-                        }
-                        const blob = new Blob([bytes], { type: mimeType });
-                        playableUrl = URL.createObjectURL(blob);
-                    } catch (err) {
-                        console.warn("Blob conversion fallback warning:", err);
-                    }
-                }
-
-                currentHistoryAudio = new Audio();
-                currentHistoryAudio.crossOrigin = "anonymous";
 
                 currentHistoryAudio.onended = () => {
                     stopHistoryAudio();
                 };
 
                 currentHistoryAudio.onerror = (e) => {
-                    console.warn("Audio element error, trying Google Drive URL if available:", e);
+                    console.error("Audio playback error:", e);
                     stopHistoryAudio();
-                    if (item.audioUrl) {
-                        window.open(item.audioUrl, '_blank');
-                        showToast("Membuka audio dari Google Drive di tab baru.", "info");
-                    } else {
-                        showToast("Format audio tidak dapat diputar langsung di browser ini.", "error");
-                    }
+                    showToast("Gagal memutar audio. Format mungkin tidak didukung langsung oleh browser.", "error");
                 };
 
-                currentHistoryAudio.src = playableUrl;
-                currentHistoryAudio.play().catch(err => {
-                    console.error("Play catch:", err);
-                    if (currentHistoryAudio && typeof currentHistoryAudio.onerror === 'function') {
-                        currentHistoryAudio.onerror(err);
-                    }
-                });
-                
+                await currentHistoryAudio.play();
                 showToast(`Memutar audio: "${item.title}"`, "info");
             } catch (e) {
                 console.error(e);
-                showToast("Gagal memutar audio riwayat.", "error");
+                showToast("Gagal memutar audio.", "error");
             }
         }
 
