@@ -60,6 +60,16 @@
             cursor: pointer;
             box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
         }
+        /* Style untuk opsi voice card saat dipilih */
+        .voice-option input[type="radio"]:checked + div .voice-title {
+            color: #ff334b !important;
+            font-weight: 700;
+        }
+        .voice-option:has(input[type="radio"]:checked) {
+            border-color: #E50914 !important;
+            background-color: rgba(229, 9, 20, 0.08) !important;
+            box-shadow: 0 0 12px rgba(229, 9, 20, 0.2);
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col md:flex-row antialiased">
@@ -410,7 +420,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Natural" checked class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">1. Pria – Natural</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">1. Pria – Natural</div>
                                         <div class="text-[10px] text-slate-400">Santai, ramah & natural (Fenrir)</div>
                                     </div>
                                 </div>
@@ -420,7 +430,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Profesional" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">2. Pria – Profesional</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">2. Pria – Profesional</div>
                                         <div class="text-[10px] text-slate-400">Jelas, terstruktur (Orus)</div>
                                     </div>
                                 </div>
@@ -430,7 +440,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Ramah" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">3. Pria – Ramah</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">3. Pria – Ramah</div>
                                         <div class="text-[10px] text-slate-400">Hangat, customer service (Puck)</div>
                                     </div>
                                 </div>
@@ -439,7 +449,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Energik" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">4. Pria – Energik</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">4. Pria – Energik</div>
                                         <div class="text-[10px] text-slate-400">Semangat tinggi, flash sale (Zephyr)</div>
                                     </div>
                                 </div>
@@ -449,7 +459,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Berwibawa" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">5. Pria – Berwibawa</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">5. Pria – Berwibawa</div>
                                         <div class="text-[10px] text-slate-400">Dalam, tegas, laptop bisnis (Charon)</div>
                                     </div>
                                 </div>
@@ -458,7 +468,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Santai" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">6. Pria – Santai</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">6. Pria – Santai</div>
                                         <div class="text-[10px] text-slate-400">Casual vlog style (Umbriel)</div>
                                     </div>
                                 </div>
@@ -467,7 +477,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Suara Marketing" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">7. Pria – Suara Marketing</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">7. Pria – Suara Marketing</div>
                                         <div class="text-[10px] text-slate-400">Persuasif promosi toko (Rasalgethi)</div>
                                     </div>
                                 </div>
@@ -476,7 +486,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Pria - Suara Presenter" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">8. Pria – Suara Presenter</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">8. Pria – Suara Presenter</div>
                                         <div class="text-[10px] text-slate-400">Iklan TV & YouTube Shorts (Gacrux)</div>
                                     </div>
                                 </div>
@@ -489,7 +499,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Natural" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">1. Wanita – Natural</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">1. Wanita – Natural</div>
                                         <div class="text-[10px] text-slate-400">Jelas & ramah (Aoede)</div>
                                     </div>
                                 </div>
@@ -498,7 +508,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Profesional" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">2. Wanita – Profesional</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">2. Wanita – Profesional</div>
                                         <div class="text-[10px] text-slate-400">Fokus & formal (Kore)</div>
                                     </div>
                                 </div>
@@ -507,7 +517,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Ramah" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">3. Wanita – Ramah</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">3. Wanita – Ramah</div>
                                         <div class="text-[10px] text-slate-400">Senyum & welcoming (Leda)</div>
                                     </div>
                                 </div>
@@ -516,7 +526,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Energik" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">4. Wanita – Energik</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">4. Wanita – Energik</div>
                                         <div class="text-[10px] text-slate-400">Cepat & antusias (Laomedeia)</div>
                                     </div>
                                 </div>
@@ -525,7 +535,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Elegan" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">5. Wanita – Elegan</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">5. Wanita – Elegan</div>
                                         <div class="text-[10px] text-slate-400">Mewah & bernada halus (Callirrhoe)</div>
                                     </div>
                                 </div>
@@ -534,7 +544,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Santai" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">6. Wanita – Santai</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">6. Wanita – Santai</div>
                                         <div class="text-[10px] text-slate-400">Informal & santai (Despina)</div>
                                     </div>
                                 </div>
@@ -543,7 +553,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Suara Marketing" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">7. Wanita – Suara Marketing</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">7. Wanita – Suara Marketing</div>
                                         <div class="text-[10px] text-slate-400">Sangat persuasif toko (Sadachbia)</div>
                                     </div>
                                 </div>
@@ -552,7 +562,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <div class="flex items-center space-x-2.5">
                                     <input type="radio" name="selected_voice" value="Wanita - Suara Presenter" class="accent-brand-red">
                                     <div>
-                                        <div class="text-xs font-bold text-slate-200">8. Wanita – Suara Presenter</div>
+                                        <div class="text-xs font-bold text-slate-200 voice-title">8. Wanita – Suara Presenter</div>
                                         <div class="text-[10px] text-slate-400">Siaran iklan TikTok/Reels (Vindemiatrix)</div>
                                     </div>
                                 </div>
@@ -565,16 +575,16 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2">
                             <i class="fa-solid fa-clapperboard text-rose-400"></i> Preset Gaya Iklan & Platform
                         </h4>
-                        <div class="grid grid-cols-3 gap-1.5 text-[11px]">
-                            <button onclick="applyAdPreset('viral')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">🔥 Iklan Viral</button>
-                            <button onclick="applyAdPreset('tiktok')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">📱 TikTok</button>
-                            <button onclick="applyAdPreset('reels')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">🎬 Instagram Reels</button>
-                            <button onclick="applyAdPreset('laptop')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">💻 Promosi Laptop</button>
-                            <button onclick="applyAdPreset('pc')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">🖥️ Promosi PC</button>
-                            <button onclick="applyAdPreset('flash')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">⚡ Flash Sale</button>
-                            <button onclick="applyAdPreset('gaming')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">🎮 Gaming</button>
-                            <button onclick="applyAdPreset('hard')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">📢 Hard Selling</button>
-                            <button onclick="applyAdPreset('soft')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">🤝 Soft Selling</button>
+                        <div class="grid grid-cols-3 gap-1.5 text-[11px]" id="ad-preset-container">
+                            <button onclick="applyAdPreset('viral', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">🔥 Iklan Viral</button>
+                            <button onclick="applyAdPreset('tiktok', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">📱 TikTok</button>
+                            <button onclick="applyAdPreset('reels', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">🎬 Instagram Reels</button>
+                            <button onclick="applyAdPreset('laptop', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">💻 Promosi Laptop</button>
+                            <button onclick="applyAdPreset('pc', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">🖥️ Promosi PC</button>
+                            <button onclick="applyAdPreset('flash', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">⚡ Flash Sale</button>
+                            <button onclick="applyAdPreset('gaming', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">🎮 Gaming</button>
+                            <button onclick="applyAdPreset('hard', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">📢 Hard Selling</button>
+                            <button onclick="applyAdPreset('soft', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">🤝 Soft Selling</button>
                         </div>
                     </div>
 
@@ -1589,20 +1599,42 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 femaleList.classList.add('hidden');
                 btnMale.className = "py-1.5 rounded-md text-center bg-brand-red text-white shadow";
                 btnFemale.className = "py-1.5 rounded-md text-center text-slate-400 hover:text-white";
+                
+                // Otomatis pilih radio button pertama untuk suara pria (Pria - Natural)
+                const firstMaleRadio = maleList.querySelector('input[type="radio"]');
+                if (firstMaleRadio) {
+                    firstMaleRadio.checked = true;
+                }
             } else {
                 femaleList.classList.remove('hidden');
                 maleList.classList.add('hidden');
                 btnFemale.className = "py-1.5 rounded-md text-center bg-brand-red text-white shadow";
                 btnMale.className = "py-1.5 rounded-md text-center text-slate-400 hover:text-white";
+                
+                // Otomatis pilih radio button pertama untuk suara wanita (Wanita - Natural)
+                const firstFemaleRadio = femaleList.querySelector('input[type="radio"]');
+                if (firstFemaleRadio) {
+                    firstFemaleRadio.checked = true;
+                }
             }
         }
 
         // Preset Quick Configs (Point 4)
-        function applyAdPreset(type) {
+        function applyAdPreset(type, btnElement) {
             const speed = document.getElementById('input-speed');
             const pitch = document.getElementById('input-pitch');
             const energy = document.getElementById('input-energy');
             const expr = document.getElementById('input-expression');
+
+            // Tandai tombol yang aktif dengan border warna saja (tanpa background solid)
+            if (btnElement) {
+                document.querySelectorAll('.ad-preset-btn').forEach(btn => {
+                    btn.classList.remove('border-brand-red', 'text-brand-red', 'font-bold', 'shadow-md', 'shadow-red-950/30', 'bg-brand-red/10');
+                    btn.classList.add('bg-slate-950', 'text-slate-200', 'border-slate-800');
+                });
+                btnElement.classList.remove('bg-slate-950', 'text-slate-200', 'border-slate-800');
+                btnElement.classList.add('bg-brand-red/10', 'border-brand-red', 'text-brand-red', 'font-bold', 'shadow-md', 'shadow-red-950/30');
+            }
 
             if(type === 'viral' || type === 'tiktok' || type === 'reels') {
                 speed.value = 1.15;
@@ -2188,26 +2220,62 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             stopHistoryAudio();
 
             try {
-                currentHistoryAudio = new Audio(audioSource);
                 currentPlayingHistoryId = id;
-
                 const btn = document.getElementById(`btn-play-hist-${id}`);
                 if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i> <span>Stop</span>';
+
+                let playableUrl = audioSource;
+
+                // Jika berupa base64 murni tanpa prefix data URI, tambahkan data URI prefix
+                if (item.audioBase64 && !item.audioBase64.startsWith('data:')) {
+                    playableUrl = `data:audio/wav;base64,${item.audioBase64}`;
+                }
+
+                // Jika base64, ubah menjadi Blob URL untuk kompatibilitas pemutar audio browser yang lebih handal
+                if (playableUrl.startsWith('data:audio/')) {
+                    try {
+                        const parts = playableUrl.split(',');
+                        const mimeMatch = parts[0].match(/:(.*?);/);
+                        const mimeType = mimeMatch ? mimeMatch[1] : 'audio/wav';
+                        const binaryString = atob(parts[1]);
+                        const len = binaryString.length;
+                        const bytes = new Uint8Array(len);
+                        for (let i = 0; i < len; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const blob = new Blob([bytes], { type: mimeType });
+                        playableUrl = URL.createObjectURL(blob);
+                    } catch (err) {
+                        console.warn("Blob conversion fallback warning:", err);
+                    }
+                }
+
+                currentHistoryAudio = new Audio();
+                currentHistoryAudio.crossOrigin = "anonymous";
 
                 currentHistoryAudio.onended = () => {
                     stopHistoryAudio();
                 };
 
-                currentHistoryAudio.onerror = () => {
+                currentHistoryAudio.onerror = (e) => {
+                    console.warn("Audio element error, trying Google Drive URL if available:", e);
                     stopHistoryAudio();
                     if (item.audioUrl) {
                         window.open(item.audioUrl, '_blank');
+                        showToast("Membuka audio dari Google Drive di tab baru.", "info");
                     } else {
-                        showToast("Gagal memutar audio riwayat.", "error");
+                        showToast("Format audio tidak dapat diputar langsung di browser ini.", "error");
                     }
                 };
 
-                currentHistoryAudio.play();
+                currentHistoryAudio.src = playableUrl;
+                currentHistoryAudio.play().catch(err => {
+                    console.error("Play catch:", err);
+                    if (currentHistoryAudio && typeof currentHistoryAudio.onerror === 'function') {
+                        currentHistoryAudio.onerror(err);
+                    }
+                });
+                
                 showToast(`Memutar audio: "${item.title}"`, "info");
             } catch (e) {
                 console.error(e);
