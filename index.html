@@ -68,7 +68,7 @@
     <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 z-30">
         <div>
             <!-- Logo Brand -->
-            <div class="p-5 flex items-center justify-between border-b border-slate-800">
+            <div class="p-5 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-rose-500 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-red-900/40">
                         <i class="fa-solid fa-microphone-lines"></i>
@@ -131,7 +131,7 @@
     <main class="flex-1 bg-slate-950 flex flex-col h-screen overflow-y-auto relative">
 
         <!-- Top Header Status Bar -->
-        <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
+        <header class="bg-slate-950 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
             <div class="flex items-center space-x-3">
                 <h2 id="page-title" class="text-xl font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-grip-vertical text-brand-red"></i> Dashboard Utama
@@ -141,9 +141,6 @@
                 <button onclick="switchTab('settings')" id="api-status-badge" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-3 py-2 rounded-lg flex items-center gap-2 transition">
                     <span class="w-2 h-2 rounded-full bg-amber-500" id="api-status-dot"></span>
                     <span id="api-status-text" class="text-slate-300">Cek API Key</span>
-                </button>
-                <button onclick="quickStart()" class="bg-gradient-to-r from-brand-red to-rose-600 hover:opacity-90 text-white font-medium text-xs px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 transition">
-                    <i class="fa-solid fa-bolt"></i> Quick Ad Generator
                 </button>
             </div>
         </header>
@@ -240,10 +237,10 @@
                         <div class="flex flex-wrap items-center gap-2">
                             <label class="text-xs font-semibold text-slate-400"><i class="fa-solid fa-layer-group text-slate-300"></i> Template Iklan:</label>
                             <select id="template-select" onchange="loadTemplate(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-red max-w-xs">
-                                <option value="">-- Pilih Template Turja Computer --</option>
+                                <option value="">-- Pilih Template --</option>
                             </select>
                             <button onclick="saveCustomTemplate()" class="bg-emerald-900/60 hover:bg-emerald-800/70 text-emerald-300 border border-emerald-700/50 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1" title="Simpan script saat ini sebagai template baru ke Google Sheet">
-                                <i class="fa-solid fa-plus"></i> Simpan Template
+                                <i class="fa-solid fa-plus"></i> Simpan
                             </button>
                             <button onclick="deleteSelectedTemplate()" id="btn-delete-template" class="hidden bg-rose-950/60 hover:bg-rose-900/70 text-rose-300 border border-rose-800/50 text-xs px-2 py-1.5 rounded-lg" title="Hapus template kustom terpilih">
                                 <i class="fa-solid fa-trash"></i>
@@ -251,7 +248,7 @@
                         </div>
                         <div class="flex items-center space-x-2">
                             <button onclick="aiRewriteScript('persuasif')" class="bg-slate-800 hover:bg-slate-700 text-xs text-amber-400 border border-slate-700 px-2.5 py-1.5 rounded-lg flex items-center gap-1">
-                                <i class="fa-solid fa-wand-magic"></i> AI Rewrite Menjual
+                                <i class="fa-solid fa-wand-magic"></i> AI Rewrite
                             </button>
                         </div>
                     </div>
@@ -759,7 +756,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
             <!-- SECTION 3B: KELOLA TEMPLATE IKLAN -->
             <section id="tab-templates" class="hidden space-y-6">
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6 shadow-xl">
+                <div class="bg-transparent border border-slate-800/80 rounded-xl p-6 space-y-6 shadow-xl">
                     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
                         <div>
                             <h3 class="text-lg font-bold text-white flex items-center gap-2">
@@ -959,7 +956,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
                             <div>
                                 <label class="block text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-link text-cyan-500"></i> Google Apps Script Web App URL (Jembatan Sync):
+                                    <i class="fa-solid fa-link text-cyan-500"></i> Google Apps Script Web App URL:
                                 </label>
                                 <input type="text" id="gsheet-webapp-url" oninput="updateSpreadsheetBadge()" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-100 focus:border-emerald-500 focus:outline-none font-mono">
                             </div>
@@ -1044,13 +1041,14 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
         // Google Sheet Database Config
         const DEFAULT_SPREADSHEET_ID = "1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA";
+        const DEFAULT_GSHEET_URL = "https://script.google.com/macros/s/AKfycbzfT3P-xHfqXUYbiZHEJLBj_OnnZwASKNfVZujzNujokuX-eHyJzyK-LoMK6hVYyN-ucg/exec";
 
         function getSpreadsheetId() {
             return localStorage.getItem('tc_spreadsheet_id') || DEFAULT_SPREADSHEET_ID;
         }
 
         function getGSheetUrl() {
-            return localStorage.getItem('tc_gsheet_url') || "";
+            return localStorage.getItem('tc_gsheet_url') || DEFAULT_GSHEET_URL;
         }
 
         function updateSpreadsheetBadge() {
@@ -1176,7 +1174,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
             if (input) input.value = key;
             if (sheetInput) sheetInput.value = sheetId;
-            if (gsheetInput) gsheetInput.value = gsheetUrl;
+            if (gsheetInput) gsheetInput.value = localStorage.getItem('tc_gsheet_url') || DEFAULT_GSHEET_URL;
             updateSpreadsheetBadge();
 
             if (key && key.trim().length > 10) {
@@ -1227,9 +1225,9 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             localStorage.removeItem('tc_gsheet_url');
             document.getElementById('gemini-api-key-input').value = '';
             document.getElementById('gsheet-spreadsheet-id').value = DEFAULT_SPREADSHEET_ID;
-            document.getElementById('gsheet-webapp-url').value = '';
+            document.getElementById('gsheet-webapp-url').value = DEFAULT_GSHEET_URL;
             checkApiKeyStatus();
-            showToast("Konfigurasi direset ke Spreadsheet ID default.", "info");
+            showToast("Konfigurasi direset ke nilai default.", "info");
         }
 
         function toggleApiKeyVisibility() {
@@ -1292,7 +1290,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             const currentVal = select.value;
             const allTemplates = [...defaultTemplates, ...customTemplates];
             
-            select.innerHTML = `<option value="">-- Pilih Template Turja Computer (${allTemplates.length}) --</option>` +
+            select.innerHTML = `<option value="">-- Pilih Template --</option>` +
                 allTemplates.map(t => `<option value="${t.id}">${t.isDefault ? '' : '⭐ '}${t.title}</option>`).join('');
             
             if (currentVal && allTemplates.some(t => String(t.id) === String(currentVal))) {
