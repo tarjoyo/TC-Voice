@@ -70,116 +70,240 @@
             background-color: rgba(229, 9, 20, 0.08) !important;
             box-shadow: 0 0 12px rgba(229, 9, 20, 0.2);
         }
+        @keyframes toastProgress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        .animate-toast-progress {
+            animation: toastProgress 3.2s linear forwards;
+        }
+        @keyframes toastPopIn {
+            0% { opacity: 0; transform: translateY(16px) scale(0.88); }
+            70% { opacity: 1; transform: translateY(-3px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-toast-pop {
+            animation: toastPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        /* Sidebar smooth transition */
+        #app-sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @media (min-width: 768px) {
+            body.sidebar-collapsed #app-sidebar {
+                width: 4.75rem !important; /* 76px - mode mini hanya menampilkan ikon */
+                overflow-x: hidden;
+            }
+            body.sidebar-collapsed #app-sidebar .sidebar-inner {
+                width: 4.75rem !important;
+            }
+            body.sidebar-collapsed #app-sidebar .sidebar-text,
+            body.sidebar-collapsed #app-sidebar .sidebar-brand-text,
+            body.sidebar-collapsed #app-sidebar .sidebar-footer-text {
+                display: none !important;
+            }
+            body.sidebar-collapsed #app-sidebar .sidebar-header {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            body.sidebar-collapsed #app-sidebar .nav-btn {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            body.sidebar-collapsed #app-sidebar .nav-btn i {
+                font-size: 1.1rem;
+            }
+            body.sidebar-collapsed #app-sidebar .sidebar-footer {
+                width: 4.75rem !important;
+                padding-left: 0;
+                padding-right: 0;
+                display: flex;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col md:flex-row antialiased">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col md:flex-row antialiased overflow-x-hidden">
+
+    <!-- Mobile Backdrop Overlay -->
+    <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-30 hidden md:hidden transition-opacity"></div>
 
     <!-- Sidebar Navigation -->
-    <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 z-30">
-        <div>
+    <aside id="app-sidebar" class="fixed md:static inset-y-0 left-0 w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 z-40 transform -translate-x-full md:translate-x-0 h-screen overflow-y-auto overflow-x-hidden">
+        <div class="w-64 sidebar-inner">
             <!-- Logo Brand -->
-            <div class="p-5 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-rose-500 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-red-900/40">
+            <div class="p-5 flex items-center justify-between border-b border-slate-800/60 sidebar-header">
+                <div onclick="toggleSidebar()" title="Klik untuk menciutkan / menampilkan sidebar" class="flex items-center space-x-3 cursor-pointer group select-none">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-rose-500 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-red-900/40 shrink-0 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-microphone-lines"></i>
                     </div>
-                    <div>
-                        <h1 class="font-bold text-lg leading-tight tracking-wide text-white">TC VOICE <span class="text-brand-red">ADS</span></h1>
+                    <div class="sidebar-brand-text">
+                        <h1 class="font-bold text-lg leading-tight tracking-wide text-white group-hover:text-rose-200 transition-colors">TC VOICE <span class="text-brand-red">ADS</span></h1>
                         <p class="text-xs text-slate-400 font-medium">Turja Computer Studio</p>
                     </div>
                 </div>
             </div>
 
             <!-- Nav Links -->
-            <nav class="p-3 space-y-1">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition-all bg-brand-red text-white">
-                    <i class="fa-solid fa-house w-5 text-center"></i>
-                    <span>Dashboard</span>
+            <nav class="p-3 space-y-1.5">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" title="Dashboard" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm transition-all border border-brand-red text-white bg-transparent">
+                    <i class="fa-solid fa-house w-5 text-center text-brand-red shrink-0"></i>
+                    <span class="sidebar-text truncate">Dashboard</span>
                 </button>
-                <button onclick="switchTab('generator')" id="nav-generator" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-                    <i class="fa-solid fa-wand-magic-sparkles w-5 text-center text-rose-500"></i>
-                    <span>Buat Voice Over</span>
+                <button onclick="switchTab('generator')" id="nav-generator" title="Buat Voice Over" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles w-5 text-center text-rose-500 shrink-0"></i>
+                    <span class="sidebar-text truncate">Buat Voice Over</span>
                 </button>
-                <button onclick="switchTab('script-ai')" id="nav-script-ai" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-                    <i class="fa-solid fa-pen-nib w-5 text-center text-amber-500"></i>
-                    <span>AI Script Writer</span>
+                <button onclick="switchTab('script-ai')" id="nav-script-ai" title="AI Script Writer" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-pen-nib w-5 text-center text-amber-500 shrink-0"></i>
+                    <span class="sidebar-text truncate">AI Script Writer</span>
                 </button>
-                <button onclick="switchTab('templates')" id="nav-templates" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-                    <i class="fa-solid fa-layer-group w-5 text-center text-indigo-400"></i>
-                    <span>Template Iklan</span>
+                <button onclick="switchTab('templates')" id="nav-templates" title="Template Iklan" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-layer-group w-5 text-center text-indigo-400 shrink-0"></i>
+                    <span class="sidebar-text truncate">Template Iklan</span>
                 </button>
-                <button onclick="switchTab('profiles')" id="nav-profiles" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-                    <i class="fa-solid fa-sliders w-5 text-center text-emerald-500"></i>
-                    <span>Voice Profiles</span>
+                <button onclick="switchTab('profiles')" id="nav-profiles" title="Voice Profiles" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-sliders w-5 text-center text-emerald-500 shrink-0"></i>
+                    <span class="sidebar-text truncate">Voice Profiles</span>
                 </button>
-                <button onclick="switchTab('history')" id="nav-history" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-                    <i class="fa-solid fa-clock-rotate-left w-5 text-center text-cyan-500"></i>
-                    <span>Riwayat Ads</span>
+                <button onclick="switchTab('history')" id="nav-history" title="Riwayat Ads" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-clock-rotate-left w-5 text-center text-cyan-500 shrink-0"></i>
+                    <span class="sidebar-text truncate">Riwayat Ads</span>
                 </button>
-                <button onclick="switchTab('branding')" id="nav-branding" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-                    <i class="fa-solid fa-store w-5 text-center text-purple-500"></i>
-                    <span>Branding Toko</span>
+                <button onclick="switchTab('branding')" id="nav-branding" title="Branding Toko" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-store w-5 text-center text-purple-500 shrink-0"></i>
+                    <span class="sidebar-text truncate">Branding Toko</span>
                 </button>
-                <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
-                    <i class="fa-solid fa-key w-5 text-center text-rose-500"></i>
-                    <span>API Key & Settings</span>
+                <button onclick="switchTab('settings')" id="nav-settings" title="API Key & Settings" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-key w-5 text-center text-rose-500 shrink-0"></i>
+                    <span class="sidebar-text truncate">API Key & Settings</span>
                 </button>
             </nav>
         </div>
 
         <!-- Footer Info -->
-        <div class="p-4 border-t border-slate-800 text-xs text-slate-500">
-            <div class="flex items-center space-x-2 mb-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-slate-300 font-medium">Gemini 2.5 TTS Engine</span>
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-500 w-64 sidebar-footer">
+            <div class="flex items-center space-x-2 mb-2" title="Gemini 2.5 TTS Engine Aktif">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                <span class="text-slate-300 font-medium sidebar-footer-text">Gemini 2.5 TTS Engine</span>
             </div>
-            <p>© 2026 TC Voice Ads v2.4. Specially crafted for Turja Computer Promos.</p>
+            <p class="sidebar-footer-text">© 2026 TC Voice Ads v2.4. Specially crafted for Turja Computer Promos.</p>
         </div>
     </aside>
 
     <!-- Main Content Container -->
-    <main class="flex-1 bg-slate-950 flex flex-col h-screen overflow-y-auto relative">
+    <main class="flex-1 bg-slate-950 flex flex-col min-h-screen md:h-screen md:overflow-y-auto relative w-full">
 
         <!-- Top Header Status Bar -->
-        <header class="bg-slate-950 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
-            <div class="flex items-center space-x-3">
-                <h2 id="page-title" class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-grip-vertical text-brand-red"></i> Dashboard Utama
+        <header class="bg-slate-950/95 backdrop-blur-md border-b border-slate-900 px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 gap-3">
+            <div class="flex items-center space-x-3 min-w-0">
+                <button onclick="toggleSidebar()" title="Tampilkan / Sembunyikan Sidebar" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-brand-red/60 text-slate-300 hover:text-white flex items-center justify-center shrink-0 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                <h2 id="page-title" class="text-base sm:text-xl font-bold text-white flex items-center gap-2 truncate">
+                    <i class="fa-solid fa-grip-vertical text-brand-red hidden sm:inline"></i> Dashboard Utama
                 </h2>
             </div>
-            <div class="flex items-center space-x-3">
-                <button onclick="switchTab('settings')" id="api-status-badge" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-3 py-2 rounded-lg flex items-center gap-2 transition">
-                    <span class="w-2 h-2 rounded-full bg-amber-500" id="api-status-dot"></span>
+            <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+                <button onclick="switchTab('settings')" id="api-status-badge" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-2.5 sm:px-3 py-2 rounded-lg flex items-center gap-2 transition">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0" id="api-status-dot"></span>
                     <span id="api-status-text" class="text-slate-300">Cek API Key</span>
                 </button>
             </div>
         </header>
 
         <!-- Dynamic Content Sections -->
-        <div class="p-6 flex-1">
-
-            <!-- SECTION 1: DASHBOARD -->
-            <section id="tab-dashboard" class="space-y-6">
+        <div class="p-4 sm:p-6 flex-1">
+            <!-- SECTION 1: DASHBOARD UTAMA -->
+            <section id="tab-dashboard" class="space-y-8">
                 <!-- Hero Banner -->
-                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-800 p-8 shadow-2xl">
-                    <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-brand-red/10 rounded-full blur-3xl"></div>
-                    <div class="max-w-3xl relative z-10 space-y-4">
-                        <span class="bg-brand-red/20 text-brand-red text-xs px-3 py-1 rounded-full font-semibold border border-brand-red/30 inline-flex items-center gap-1.5">
-                            <i class="fa-solid fa-sparkles"></i> AI Voice Generator Pro 2026
-                        </span>
-                        <h1 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">
-                            Buat Voice Over Iklan Profesional Dalam Hitungan Detik.
-                        </h1>
-                        <p class="text-slate-300 text-sm md:text-base leading-relaxed">
-                            Ubah teks promosi laptop, PC rakitan, printer, dan komputer bekas menjadi suara manusia yang sangat natural, ekspresif, dan berwibawa khusus untuk TikTok, Instagram Reels, Marketplace & WA Status.
-                        </p>
-                        <div class="pt-2 flex flex-wrap gap-3">
-                            <button onclick="switchTab('generator')" class="bg-brand-red hover:bg-brand-redhover text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-red-950 flex items-center gap-2 transition transform active:scale-95">
-                                <i class="fa-solid fa-microphone"></i> Mulai Buat Voice Over
-                            </button>
-                            <button onclick="switchTab('script-ai')" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
-                                <i class="fa-solid fa-pen-sparkles text-amber-400"></i> Buat Script Otomatis AI
-                            </button>
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-800 p-6 sm:p-8 shadow-2xl">
+                    <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-brand-red/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+                        <div class="max-w-2xl space-y-4">
+                            <span class="bg-brand-red/20 text-brand-red text-xs px-3 py-1 rounded-full font-semibold border border-brand-red/30 inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-sparkles"></i> AI Voice Generator Pro 2026
+                            </span>
+                            <h1 class="text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                                Buat Voice Over Iklan Profesional Dalam Hitungan Detik.
+                            </h1>
+                            <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+                                Ubah teks promosi laptop, PC rakitan, printer, dan komputer bekas menjadi suara manusia yang sangat natural, ekspresif, dan berwibawa khusus untuk TikTok, Instagram Reels, Marketplace & WA Status.
+                            </p>
+                            <div class="pt-2 flex flex-wrap gap-3">
+                                <button onclick="switchTab('generator')" class="bg-brand-red hover:bg-brand-redhover text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-red-950 flex items-center gap-2 transition transform active:scale-95">
+                                    <i class="fa-solid fa-microphone"></i> Mulai Buat Voice Over
+                                </button>
+                                <button onclick="switchTab('script-ai')" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
+                                    <i class="fa-solid fa-pen-sparkles text-amber-400"></i> Buat Script Otomatis AI
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Visual Ilustrasi Mikrofon Studio & AI Audio Wave -->
+                        <div class="shrink-0 flex items-center justify-center w-full lg:w-auto">
+                            <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-slate-950/80 border border-slate-700/60 shadow-2xl flex flex-col items-center justify-center p-6 backdrop-blur-md group hover:border-brand-red/50 transition-all duration-300">
+                                <!-- Efek Cahaya Belakang -->
+                                <div class="absolute inset-0 bg-gradient-to-tr from-brand-red/15 via-transparent to-rose-500/10 rounded-3xl pointer-events-none"></div>
+                                
+                                <!-- Ilustrasi SVG Mikrofon Studio & Gelombang Suara -->
+                                <svg class="w-36 h-36 drop-shadow-[0_10px_25px_rgba(229,9,20,0.45)] group-hover:scale-105 transition-transform duration-300" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="micGrad" x1="65" y1="30" x2="135" y2="120" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#FF3B4E"/>
+                                            <stop offset="100%" stop-color="#B80710"/>
+                                        </linearGradient>
+                                        <linearGradient id="standGrad" x1="100" y1="115" x2="100" y2="175" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#94A3B8"/>
+                                            <stop offset="100%" stop-color="#475569"/>
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Lingkaran Radar Gelombang Suara -->
+                                    <circle cx="100" cy="80" r="68" stroke="#E50914" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="6 6"/>
+                                    <circle cx="100" cy="80" r="52" stroke="#F43F5E" stroke-opacity="0.28" stroke-width="1.5"/>
+
+                                    <!-- Gelombang Suara Kiri -->
+                                    <rect x="24" y="68" width="4" height="24" rx="2" fill="#F43F5E" opacity="0.7"/>
+                                    <rect x="33" y="58" width="4" height="44" rx="2" fill="#E50914" opacity="0.9"/>
+                                    <rect x="42" y="64" width="4" height="32" rx="2" fill="#FB7185" opacity="0.8"/>
+
+                                    <!-- Gelombang Suara Kanan -->
+                                    <rect x="154" y="64" width="4" height="32" rx="2" fill="#FB7185" opacity="0.8"/>
+                                    <rect x="163" y="58" width="4" height="44" rx="2" fill="#E50914" opacity="0.9"/>
+                                    <rect x="172" y="68" width="4" height="24" rx="2" fill="#F43F5E" opacity="0.7"/>
+
+                                    <!-- Kapsul Mikrofon Utama -->
+                                    <rect x="76" y="34" width="48" height="82" rx="24" fill="url(#micGrad)"/>
+                                    <!-- Detail Grill Mikrofon -->
+                                    <line x1="84" y1="54" x2="116" y2="54" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="82" y1="66" x2="118" y2="66" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="82" y1="78" x2="118" y2="78" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="84" y1="90" x2="116" y2="90" stroke="#0F172A" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round"/>
+                                    <!-- Kilauan Kaca Kapsul -->
+                                    <rect x="84" y="42" width="6" height="42" rx="3" fill="#FFFFFF" fill-opacity="0.22"/>
+
+                                    <!-- Penyangga / Stand Mikrofon -->
+                                    <path d="M62 84C62 104.987 79.0132 122 100 122C120.987 122 138 104.987 138 84" stroke="url(#standGrad)" stroke-width="6" stroke-linecap="round"/>
+                                    <line x1="100" y1="122" x2="100" y2="156" stroke="url(#standGrad)" stroke-width="6" stroke-linecap="round"/>
+                                    <rect x="72" y="154" width="56" height="8" rx="4" fill="#64748B"/>
+                                </svg>
+
+                                <!-- Lencana Audio Studio di Bawah Ilustrasi -->
+                                <div class="mt-2 flex items-center gap-2 bg-slate-900/90 border border-slate-800 px-3.5 py-1.5 rounded-full shadow-inner">
+                                    <span class="flex items-end gap-0.5 h-3">
+                                        <span class="w-1 h-2 bg-brand-red rounded-full animate-pulse"></span>
+                                        <span class="w-1 h-3 bg-rose-400 rounded-full animate-bounce"></span>
+                                        <span class="w-1 h-1.5 bg-brand-red rounded-full animate-pulse"></span>
+                                        <span class="w-1 h-2.5 bg-rose-400 rounded-full animate-bounce"></span>
+                                    </span>
+                                    <span class="text-[11px] font-bold tracking-wide text-slate-200">16 AI Studio Voices</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -329,7 +453,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                             <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded">Auto Smart Reader</span>
                         </div>
                         <p class="text-xs text-slate-400">Pilih bagaimana AI membaca istilah komputer (e.g. "i5", "RAM 8GB", "SSD 256GB NVMe", "Rp4.000.000"):</p>
-                        <div class="grid grid-cols-3 gap-2 text-xs">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                             <label class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 cursor-pointer flex items-center gap-2 hover:border-slate-700">
                                 <input type="radio" name="tech_mode" value="natural" checked class="accent-brand-red">
                                 <div>
@@ -575,7 +699,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2">
                             <i class="fa-solid fa-clapperboard text-rose-400"></i> Preset Gaya Iklan & Platform
                         </h4>
-                        <div class="grid grid-cols-3 gap-1.5 text-[11px]" id="ad-preset-container">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[11px]" id="ad-preset-container">
                             <button onclick="applyAdPreset('viral', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">🔥 Iklan Viral</button>
                             <button onclick="applyAdPreset('tiktok', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">📱 TikTok</button>
                             <button onclick="applyAdPreset('reels', this)" class="ad-preset-btn bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left transition">🎬 Instagram Reels</button>
@@ -920,16 +1044,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         <h3 class="text-lg font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-key text-rose-500"></i> Konfigurasi Gemini API Key
                         </h3>
-                        <p class="text-xs text-slate-400 mt-1">Wajib diisi jika aplikasi di-hosting secara mandiri (seperti di Vercel, GitHub Pages, atau Netlify).</p>
-                    </div>
-
-                    <div class="bg-amber-950/40 border border-amber-800/50 rounded-xl p-4 text-xs text-amber-200 space-y-2">
-                        <div class="font-bold flex items-center gap-1.5 text-amber-400">
-                            <i class="fa-solid fa-circle-info"></i> Mengapa harus memasukkan API Key?
-                        </div>
-                        <p class="leading-relaxed text-amber-200/90">
-                            Di luar lingkungan preview, browser membutuhkan kunci akses resmi dari Google AI Studio untuk memproses suara AI (Gemini TTS) dan pembuatan script otomatis. Kunci ini hanya disimpan secara lokal di browser Anda (aman & tidak dikirim ke server lain).
-                        </p>
                     </div>
 
                     <div class="space-y-4 text-xs">
@@ -990,11 +1104,42 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         </div>
     </main>
 
-    <!-- Global Toast Notification UI -->
-    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+    <!-- Global Toast Notification UI (Centered & Rich Icon Design) -->
+    <div id="toast-container" class="fixed inset-0 pointer-events-none z-50 flex flex-col items-center justify-center p-4 gap-3"></div>
 
     <!-- Application Script Logic -->
     <script>
+        // Google Spreadsheet & Apps Script Defaults
+        const DEFAULT_SPREADSHEET_ID = "1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA";
+        const DEFAULT_GSHEET_URL = "";
+
+        function getSpreadsheetId() {
+            return localStorage.getItem('tc_spreadsheet_id') || DEFAULT_SPREADSHEET_ID;
+        }
+
+        function getGSheetUrl() {
+            return localStorage.getItem('tc_gsheet_url') || DEFAULT_GSHEET_URL;
+        }
+
+        function updateSpreadsheetBadge() {
+            const input = document.getElementById('gsheet-spreadsheet-id');
+            const badge = document.getElementById('sheet-connection-badge');
+            const dot = document.getElementById('sheet-connection-dot');
+            const text = document.getElementById('sheet-connection-text');
+            if (!input || !badge || !dot || !text) return;
+
+            const val = input.value.trim();
+            if (val.length > 10) {
+                badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-700/50";
+                dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse";
+                text.innerText = "ID Spreadsheet Terhubung";
+            } else {
+                badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-950/80 text-amber-400 border border-amber-700/50";
+                dot.className = "w-1.5 h-1.5 rounded-full bg-amber-400";
+                text.innerText = "ID Belum Valid";
+            }
+        }
+
         // Global State & Storage
         let audioContext = null;
         let currentAudioBuffer = null;
@@ -1038,6 +1183,9 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
         // Initialize App on DOM Load
         window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('tc_sidebar_collapsed') === 'true' && window.innerWidth >= 768) {
+                document.body.classList.add('sidebar-collapsed');
+            }
             renderTemplateDropdown();
             renderTemplatesManager();
             updateScriptStats();
@@ -1049,44 +1197,24 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             syncAllFromGoogleSheet(false);
         });
 
-        // Google Sheet Database Config
-        const DEFAULT_SPREADSHEET_ID = "1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA";
-        const DEFAULT_GSHEET_URL = "https://script.google.com/macros/s/AKfycbzfT3P-xHfqXUYbiZHEJLBj_OnnZwASKNfVZujzNujokuX-eHyJzyK-LoMK6hVYyN-ucg/exec";
+        // Toggle Sidebar Responsive (Desktop Collapse & Mobile Drawer)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('app-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const isMobile = window.innerWidth < 768;
 
-        function getSpreadsheetId() {
-            return localStorage.getItem('tc_spreadsheet_id') || DEFAULT_SPREADSHEET_ID;
-        }
-
-        function getGSheetUrl() {
-            return localStorage.getItem('tc_gsheet_url') || DEFAULT_GSHEET_URL;
-        }
-
-        function updateSpreadsheetBadge() {
-            const sheetInput = document.getElementById('gsheet-spreadsheet-id');
-            const urlInput = document.getElementById('gsheet-webapp-url');
-            const badge = document.getElementById('sheet-connection-badge');
-            const dot = document.getElementById('sheet-connection-dot');
-            const text = document.getElementById('sheet-connection-text');
-
-            if (!sheetInput || !badge) return;
-
-            const currentId = sheetInput.value.trim();
-            const currentUrl = urlInput ? urlInput.value.trim() : "";
-
-            if (currentId.length >= 15) {
-                if (currentUrl && currentUrl.includes('/exec')) {
-                    badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/90 text-emerald-400 border border-emerald-600/60";
-                    dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse";
-                    text.innerText = "ID & Web App Terhubung";
+            if (isMobile) {
+                const isClosed = sidebar.classList.contains('-translate-x-full');
+                if (isClosed) {
+                    sidebar.classList.remove('-translate-x-full');
+                    backdrop.classList.remove('hidden');
                 } else {
-                    badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-950/90 text-cyan-400 border border-cyan-700/60";
-                    dot.className = "w-1.5 h-1.5 rounded-full bg-cyan-400";
-                    text.innerText = "ID Spreadsheet Terhubung";
+                    sidebar.classList.add('-translate-x-full');
+                    backdrop.classList.add('hidden');
                 }
             } else {
-                badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-950/90 text-amber-400 border border-amber-700/60";
-                dot.className = "w-1.5 h-1.5 rounded-full bg-amber-400";
-                text.innerText = "ID Spreadsheet Belum Valid";
+                document.body.classList.toggle('sidebar-collapsed');
+                localStorage.setItem('tc_sidebar_collapsed', document.body.classList.contains('sidebar-collapsed'));
             }
         }
 
@@ -1256,16 +1384,29 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         function switchTab(tabId) {
             const tabs = ['dashboard', 'generator', 'script-ai', 'templates', 'profiles', 'history', 'branding', 'settings'];
             tabs.forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`nav-${t}`)?.classList.remove('bg-brand-red', 'text-white');
-                document.getElementById(`nav-${t}`)?.classList.add('text-slate-400');
+                const tabEl = document.getElementById(`tab-${t}`);
+                if (tabEl) tabEl.classList.add('hidden');
+                const navEl = document.getElementById(`nav-${t}`);
+                if (navEl) {
+                    navEl.classList.remove('border-brand-red', 'text-white', 'bg-transparent');
+                    navEl.classList.add('border-transparent', 'text-slate-400');
+                }
             });
 
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if (activeTab) activeTab.classList.remove('hidden');
             const activeNav = document.getElementById(`nav-${tabId}`);
-            if(activeNav) {
-                activeNav.classList.add('bg-brand-red', 'text-white');
-                activeNav.classList.remove('text-slate-400');
+            if (activeNav) {
+                activeNav.classList.remove('border-transparent', 'text-slate-400');
+                activeNav.classList.add('border-brand-red', 'text-white', 'bg-transparent');
+            }
+
+            // Otomatis tutup drawer sidebar jika dibuka dari perangkat HP
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('app-sidebar');
+                const backdrop = document.getElementById('sidebar-backdrop');
+                sidebar.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
             }
 
             const titles = {
@@ -1278,7 +1419,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 branding: 'Branding Toko',
                 settings: 'API Key & Settings'
             };
-            document.getElementById('page-title').innerHTML = `<i class="fa-solid fa-grip-vertical text-brand-red"></i> ${titles[tabId]}`;
+            document.getElementById('page-title').innerHTML = `<i class="fa-solid fa-grip-vertical text-brand-red hidden sm:inline"></i> ${titles[tabId]}`;
         }
 
         function quickStart() {
@@ -2536,32 +2677,85 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             
-            const colors = {
-                success: 'bg-emerald-900/90 border-emerald-700 text-emerald-100',
-                error: 'bg-rose-900/90 border-rose-700 text-rose-100',
-                warning: 'bg-amber-900/90 border-amber-700 text-amber-100',
-                info: 'bg-slate-900/90 border-slate-700 text-slate-100'
+            const configs = {
+                success: {
+                    card: 'border-emerald-500/40 shadow-[0_20px_50px_rgba(16,185,129,0.22)]',
+                    topGlow: 'from-emerald-400 via-teal-400 to-emerald-500',
+                    iconRing: 'ring-emerald-500/30 bg-emerald-500/15 text-emerald-400',
+                    badgeBg: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+                    icon: 'fa-solid fa-circle-check',
+                    title: 'Sukses',
+                    progress: 'bg-gradient-to-r from-emerald-400 to-teal-400'
+                },
+                error: {
+                    card: 'border-rose-500/40 shadow-[0_20px_50px_rgba(244,63,94,0.25)]',
+                    topGlow: 'from-rose-500 via-red-500 to-pink-500',
+                    iconRing: 'ring-rose-500/30 bg-rose-500/15 text-rose-400',
+                    badgeBg: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+                    icon: 'fa-solid fa-circle-exclamation',
+                    title: 'Gagal',
+                    progress: 'bg-gradient-to-r from-rose-500 to-pink-500'
+                },
+                warning: {
+                    card: 'border-amber-500/40 shadow-[0_20px_50px_rgba(245,158,11,0.22)]',
+                    topGlow: 'from-amber-400 via-orange-400 to-yellow-500',
+                    iconRing: 'ring-amber-500/30 bg-amber-500/15 text-amber-400',
+                    badgeBg: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+                    icon: 'fa-solid fa-triangle-exclamation',
+                    title: 'Perhatian',
+                    progress: 'bg-gradient-to-r from-amber-400 to-orange-400'
+                },
+                info: {
+                    card: 'border-cyan-500/40 shadow-[0_20px_50px_rgba(6,182,212,0.22)]',
+                    topGlow: 'from-cyan-400 via-blue-500 to-indigo-500',
+                    iconRing: 'ring-cyan-500/30 bg-cyan-500/15 text-cyan-400',
+                    badgeBg: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+                    icon: 'fa-solid fa-wand-magic-sparkles',
+                    title: 'Info Sistem',
+                    progress: 'bg-gradient-to-r from-cyan-400 to-indigo-400'
+                }
             };
 
-            const icons = {
-                success: 'fa-circle-check text-emerald-400',
-                error: 'fa-circle-xmark text-rose-400',
-                warning: 'fa-triangle-exclamation text-amber-400',
-                info: 'fa-circle-info text-cyan-400'
-            };
+            const cfg = configs[type] || configs.info;
 
-            toast.className = `flex items-center space-x-3 px-4 py-3 rounded-xl border shadow-xl text-xs backdrop-blur font-medium transition duration-300 transform translate-y-2 opacity-0 ${colors[type]}`;
-            toast.innerHTML = `<i class="fa-solid ${icons[type]} text-base"></i> <span>${message}</span>`;
+            toast.className = `pointer-events-auto relative overflow-hidden max-w-sm w-full bg-slate-900/90 backdrop-blur-2xl border ${cfg.card} rounded-3xl p-5 transition-all duration-300 animate-toast-pop`;
+            toast.innerHTML = `
+                <!-- Top Neon Accent Line -->
+                <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${cfg.topGlow}"></div>
+                
+                <div class="flex items-start gap-4">
+                    <!-- Glowing Ring Icon -->
+                    <div class="w-12 h-12 rounded-2xl ${cfg.iconRing} ring-4 flex items-center justify-center shrink-0 text-xl mt-0.5">
+                        <i class="${cfg.icon}"></i>
+                    </div>
+                    
+                    <!-- Text Content -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${cfg.badgeBg}">
+                                ${cfg.title}
+                            </span>
+                            <button onclick="this.closest('.pointer-events-auto').remove()" class="w-6 h-6 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-100 font-medium leading-snug">${message}</p>
+                    </div>
+                </div>
+
+                <!-- Animated Countdown Progress Bar -->
+                <div class="mt-4 w-full h-1 bg-slate-800/90 rounded-full overflow-hidden">
+                    <div class="h-full ${cfg.progress} rounded-full animate-toast-progress"></div>
+                </div>
+            `;
             
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
 
             setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
+                toast.style.opacity = '0';
+                toast.style.transform = 'scale(0.92) translateY(8px)';
                 setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            }, 3200);
         }
     </script>
 </body>
