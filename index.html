@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TC Voice Ads</title>
+    <title>TC Voice Ads – AI Voice Generator</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -94,6 +94,10 @@
                     <i class="fa-solid fa-pen-nib w-5 text-center text-amber-500"></i>
                     <span>AI Script Writer</span>
                 </button>
+                <button onclick="switchTab('templates')" id="nav-templates" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-layer-group w-5 text-center text-indigo-400"></i>
+                    <span>Template Iklan</span>
+                </button>
                 <button onclick="switchTab('profiles')" id="nav-profiles" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                     <i class="fa-solid fa-sliders w-5 text-center text-emerald-500"></i>
                     <span>Voice Profiles</span>
@@ -105,6 +109,10 @@
                 <button onclick="switchTab('branding')" id="nav-branding" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
                     <i class="fa-solid fa-store w-5 text-center text-purple-500"></i>
                     <span>Branding Toko</span>
+                </button>
+                <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-key w-5 text-center text-rose-500"></i>
+                    <span>API Key & Settings</span>
                 </button>
             </nav>
         </div>
@@ -129,7 +137,11 @@
                     <i class="fa-solid fa-grip-vertical text-brand-red"></i> Dashboard Utama
                 </h2>
             </div>
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-3">
+                <button onclick="switchTab('settings')" id="api-status-badge" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-3 py-2 rounded-lg flex items-center gap-2 transition">
+                    <span class="w-2 h-2 rounded-full bg-amber-500" id="api-status-dot"></span>
+                    <span id="api-status-text" class="text-slate-300">Cek API Key</span>
+                </button>
                 <button onclick="quickStart()" class="bg-gradient-to-r from-brand-red to-rose-600 hover:opacity-90 text-white font-medium text-xs px-4 py-2.5 rounded-lg shadow-lg flex items-center gap-2 transition">
                     <i class="fa-solid fa-bolt"></i> Quick Ad Generator
                 </button>
@@ -225,17 +237,17 @@
 
                     <!-- Script Templates & AI Fast Rewrite Toolbar -->
                     <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
-                        <div class="flex items-center space-x-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <label class="text-xs font-semibold text-slate-400"><i class="fa-solid fa-layer-group text-slate-300"></i> Template Iklan:</label>
-                            <select id="template-select" onchange="loadTemplate(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-red">
+                            <select id="template-select" onchange="loadTemplate(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-red max-w-xs">
                                 <option value="">-- Pilih Template Turja Computer --</option>
-                                <option value="temp_1">Template 1 – Promo Laptop Second Lenovo ThinkPad</option>
-                                <option value="temp_2">Template 2 – Flash Sale Laptop Murah Hari Ini</option>
-                                <option value="temp_3">Template 3 – Laptop Second Teruji & Garansi</option>
-                                <option value="temp_4">Template 4 – Laptop Pelajar / Kuliah Hemat</option>
-                                <option value="temp_5">Template 5 – Laptop Kantoran / Bisnis High-Spec</option>
-                                <option value="temp_6">Template 6 – Promo PC Gaming Rakitan Intel/Ryzen</option>
                             </select>
+                            <button onclick="saveCustomTemplate()" class="bg-emerald-900/60 hover:bg-emerald-800/70 text-emerald-300 border border-emerald-700/50 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1" title="Simpan script saat ini sebagai template baru ke Google Sheet">
+                                <i class="fa-solid fa-plus"></i> Simpan Template
+                            </button>
+                            <button onclick="deleteSelectedTemplate()" id="btn-delete-template" class="hidden bg-rose-950/60 hover:bg-rose-900/70 text-rose-300 border border-rose-800/50 text-xs px-2 py-1.5 rounded-lg" title="Hapus template kustom terpilih">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                         <div class="flex items-center space-x-2">
                             <button onclick="aiRewriteScript('persuasif')" class="bg-slate-800 hover:bg-slate-700 text-xs text-amber-400 border border-slate-700 px-2.5 py-1.5 rounded-lg flex items-center gap-1">
@@ -554,7 +566,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                     <!-- Preset Gaya Iklan (Point 4) -->
                     <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
                         <h4 class="text-xs font-bold text-slate-200 flex items-center gap-2">
-                            <i class="fa-solid fa-[#FF2E93] fa-clapperboard text-rose-400"></i> Preset Gaya Iklan & Platform
+                            <i class="fa-solid fa-clapperboard text-rose-400"></i> Preset Gaya Iklan & Platform
                         </h4>
                         <div class="grid grid-cols-3 gap-1.5 text-[11px]">
                             <button onclick="applyAdPreset('viral')" class="bg-slate-950 border border-slate-800 hover:border-brand-red text-slate-200 py-1.5 px-2 rounded-lg truncate text-left">🔥 Iklan Viral</button>
@@ -621,9 +633,9 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
                     <!-- Main Generation Controls Button -->
                     <div class="space-y-3">
-                        <button onclick="generateVoiceOver()" id="btn-generate-main" class="w-full py-4 bg-gradient-to-r from-brand-red via-rose-600 to-red-700 hover:from-rose-600 hover:to-brand-red text-white font-extrabold text-base rounded-xl shadow-xl shadow-red-950 flex items-center justify-center gap-3 transition transform active:scale-98">
+                        <button onclick="generateVoiceOver()" id="btn-generate-main" class="w-full py-4 bg-gradient-to-r from-brand-red via-rose-600 to-red-700 hover:from-rose-600 hover:to-brand-red text-white font-extrabold text-base rounded-xl shadow-xl shadow-red-950 flex items-center justify-center gap-3 transition-all duration-200 transform active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed">
                             <i class="fa-solid fa-play text-lg"></i>
-                            <span>BUAT SUARA (GENERATE VOICE)</span>
+                            <span>BUAT SUARA</span>
                         </button>
                     </div>
 
@@ -728,13 +740,66 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
                     <!-- AI Generated Result Box -->
                     <div id="ai-script-result-box" class="hidden space-y-3 pt-4 border-t border-slate-800">
-                        <div class="flex items-center justify-between">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
                             <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-circle-check"></i> Script Berhasil Dibuat:</span>
-                            <button onclick="useAIScriptInGenerator()" class="bg-brand-red hover:bg-brand-redhover text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 shadow">
-                                <i class="fa-solid fa-arrow-right"></i> Gantikan Script di Generator
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button onclick="saveAIScriptAsTemplate()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow transition">
+                                    <i class="fa-solid fa-bookmark"></i> Simpan ke Template
+                                </button>
+                                <button onclick="useAIScriptInGenerator()" class="bg-brand-red hover:bg-brand-redhover text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow transition">
+                                    <i class="fa-solid fa-arrow-right"></i> Gantikan Script di Generator
+                                </button>
+                            </div>
                         </div>
                         <div id="ai-script-output" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-sm text-slate-200 leading-relaxed font-sans whitespace-pre-wrap"></div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- SECTION 3B: KELOLA TEMPLATE IKLAN -->
+            <section id="tab-templates" class="hidden space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6 shadow-xl">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-layer-group text-indigo-400"></i> Kelola Template Iklan
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1">Buat, edit, gunakan, atau hapus template script iklan Anda. Tersinkronisasi otomatis ke Google Sheet.</p>
+                        </div>
+                        <button onclick="openTemplateForm()" class="bg-brand-red hover:bg-brand-redhover text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 shadow-lg transition">
+                            <i class="fa-solid fa-plus"></i> Tambah Template Baru
+                        </button>
+                    </div>
+
+                    <!-- Form Tambah / Edit Template -->
+                    <div id="template-editor-box" class="hidden bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <span id="template-form-title" class="text-xs font-bold text-indigo-400"><i class="fa-solid fa-pen-to-square"></i> Tambah Template Baru</span>
+                            <button onclick="closeTemplateForm()" class="text-slate-400 hover:text-white text-xs"><i class="fa-solid fa-xmark"></i> Tutup</button>
+                        </div>
+                        <input type="hidden" id="edit-template-id">
+                        <div class="space-y-3 text-xs">
+                            <div>
+                                <label class="block text-slate-300 font-semibold mb-1">Judul Template:</label>
+                                <input type="text" id="edit-template-title" placeholder="misal: Promo Laptop Asus ROG Gaming" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-slate-100 focus:border-brand-red focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 font-semibold mb-1">Isi Script Iklan:</label>
+                                <textarea id="edit-template-content" rows="5" placeholder="Tulis naskah promosi di sini..." class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-slate-100 focus:border-brand-red focus:outline-none leading-relaxed"></textarea>
+                            </div>
+                            <div class="flex justify-end gap-2">
+                                <button onclick="closeTemplateForm()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg font-medium">Batal</button>
+                                <button onclick="saveTemplateFromManager()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold flex items-center gap-1.5">
+                                    <i class="fa-solid fa-floppy-disk"></i> Simpan Template
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid Daftar Template -->
+                    <div id="templates-manager-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <!-- Populated by JS -->
                     </div>
                 </div>
             </section>
@@ -779,7 +844,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         <table class="w-full text-left text-xs text-slate-300">
                             <thead class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase text-[10px]">
                                 <tr>
-                                    <th class="p-3">Judul Script</th>
+                                    <th class="p-3">Judul & Audio Preview</th>
                                     <th class="p-3">Voice Character</th>
                                     <th class="p-3">Durasi</th>
                                     <th class="p-3">Tanggal</th>
@@ -814,11 +879,11 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         </div>
                         <div>
                             <label class="block text-slate-300 font-semibold mb-1">Nomor WhatsApp Promosi:</label>
-                            <input type="text" id="brand-wa" value="0812-3456-7890" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-100 focus:border-brand-red focus:outline-none">
+                            <input type="text" id="brand-wa" value="0856-4260-0190" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-100 focus:border-brand-red focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-slate-300 font-semibold mb-1">Alamat Singkat Toko / Mall:</label>
-                            <input type="text" id="brand-address" value="ITC Mal Mangga Dua Lantai 3 No. 45" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-100 focus:border-brand-red focus:outline-none">
+                            <input type="text" id="brand-address" value="Pakisputih Kedungwuni Pekalongan" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-100 focus:border-brand-red focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-slate-300 font-semibold mb-1">Template Kalimat CTA Favorit:</label>
@@ -830,9 +895,88 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         </div>
                     </div>
 
-                    <button onclick="saveBrandingConfig()" class="w-full py-3 bg-brand-red hover:bg-brand-redhover text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-floppy-disk"></i> Simpan Configuration Branding
-                    </button>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="saveBrandingConfig()" id="btn-save-branding" class="flex-1 py-3 bg-brand-red hover:bg-brand-redhover text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan & Sync ke Google Sheet
+                        </button>
+                        <button onclick="syncAllFromGoogleSheet(true)" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-semibold text-xs rounded-xl flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-rotate"></i> Muat dari Sheet
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: API KEY & SETTINGS (UNTUK VERCEL / HOSTING MANDIRI) -->
+            <section id="tab-settings" class="hidden max-w-2xl mx-auto space-y-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-5 shadow-xl">
+                    <div class="border-b border-slate-800 pb-3">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-key text-rose-500"></i> Konfigurasi Gemini API Key
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">Wajib diisi jika aplikasi di-hosting secara mandiri (seperti di Vercel, GitHub Pages, atau Netlify).</p>
+                    </div>
+
+                    <div class="bg-amber-950/40 border border-amber-800/50 rounded-xl p-4 text-xs text-amber-200 space-y-2">
+                        <div class="font-bold flex items-center gap-1.5 text-amber-400">
+                            <i class="fa-solid fa-circle-info"></i> Mengapa harus memasukkan API Key?
+                        </div>
+                        <p class="leading-relaxed text-amber-200/90">
+                            Di luar lingkungan preview, browser membutuhkan kunci akses resmi dari Google AI Studio untuk memproses suara AI (Gemini TTS) dan pembuatan script otomatis. Kunci ini hanya disimpan secara lokal di browser Anda (aman & tidak dikirim ke server lain).
+                        </p>
+                    </div>
+
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">Masukkan Google Gemini API Key Anda:</label>
+                            <div class="relative">
+                                <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 pr-20 text-slate-100 focus:border-brand-red focus:outline-none font-mono">
+                                <button onclick="toggleApiKeyVisibility()" type="button" class="absolute right-3 top-2.5 text-slate-400 hover:text-white text-xs px-2 py-1">
+                                    <i class="fa-solid fa-eye" id="eye-icon"></i>
+                                </button>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-2">
+                                Belum punya API Key? Dapatkan gratis di <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-brand-red hover:underline font-semibold">Google AI Studio <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></a>.
+                            </p>
+                        </div>
+
+                        <!-- Konfigurasi Google Apps Script Web App URL -->
+                        <div class="pt-4 border-t border-slate-800 space-y-3">
+                            <div>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="text-slate-300 font-semibold flex items-center gap-1.5">
+                                        <i class="fa-solid fa-database text-emerald-500"></i> Google Spreadsheet ID:
+                                    </label>
+                                    <span id="sheet-connection-badge" class="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-700/50">
+                                        <span id="sheet-connection-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                        <span id="sheet-connection-text">ID Spreadsheet Terhubung</span>
+                                    </span>
+                                </div>
+                                <input type="text" id="gsheet-spreadsheet-id" oninput="updateSpreadsheetBadge()" placeholder="1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-emerald-400 focus:border-emerald-500 focus:outline-none font-mono">
+                                <p class="text-[11px] text-slate-400 mt-1">
+                                    Default ID: <code class="text-slate-300 bg-slate-950 px-1.5 py-0.5 rounded">1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA</code>
+                                </p>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-link text-cyan-500"></i> Google Apps Script Web App URL (Jembatan Sync):
+                                </label>
+                                <input type="text" id="gsheet-webapp-url" oninput="updateSpreadsheetBadge()" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-100 focus:border-emerald-500 focus:outline-none font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="saveGeminiApiKey()" class="flex-1 py-3 bg-brand-red hover:bg-brand-redhover text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi
+                        </button>
+                        <button onclick="syncAllFromGoogleSheet(true)" class="px-4 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate"></i> Sync Sheet
+                        </button>
+                        <button onclick="clearGeminiApiKey()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl border border-slate-700 transition">
+                            Reset
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -875,26 +1019,234 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         };
 
         // Templates Database (Point 16)
-        const templates = {
-            temp_1: "Sedang mencari laptop berkualitas dengan harga terjangkau?\nLenovo ThinkPad X390 ini bisa jadi pilihan terbaik Anda.\nIntel Core i5 Gen 8, RAM 8GB DDR4, SSD 256GB NVMe, layar 13.3 inci Full HD.\nCocok untuk kerja, kuliah, sekolah, maupun bisnis.\nHarga hanya 4 jutaan!\nStok terbatas, segera hubungi Turja Computer.",
-            temp_2: "FLASH SALE HARI INI DI TURJA COMPUTER!\nDiskon besar-besaran untuk laptop secondhand rasa baru.\nIntel Core i7, RAM 16GB, SSD 512GB cuma 5 jutaan!\nGaransi toko 1 bulan full sparepart.\nJangan sampai kehabisan, buruan chat WhatsApp sekarang!",
-            temp_3: "Siapa bilang laptop second tidak berkualitas?\nLaptop di Turja Computer sudah melalui 20 titik inspeksi ketat dan siap pakai.\nBodi mulus, baterai awet, performa kencang untuk kerja dan gaming.\nDapatkan unit terbaikmu dengan harga miring hanya hari ini!",
-            temp_4: "Butuh laptop murah untuk sekolah atau kuliah online?\nTurja Computer punya solusinya!\nLaptop slim ringan, layar Full HD jernih, baterai tahan lama.\nHarga mulai dari 2 jutaan saja.\nSudah terinstall Windows dan Office original siap pakai!",
-            temp_5: "Untuk kebutuhan kerja profesional dan bisnis tanpa lelet.\nPerkenalkan laptop bisnis ultra-durable dengan spesifikasi tinggi.\nProsesor kencang, RAM 16GB multitasking lancar, bodi kokoh standar militer.\nHubungi Turja Computer untuk penawaran spesial perusahaan.",
-            temp_6: "PROMO SPECIAL PC GAMING RAKITAN!\nMain Game AAA dan Edit Video 4K tanpa patah-patah.\nIntel Core i5 Gen 12, VGA RTX 3060, RAM 16GB RGB, SSD NVMe 1TB.\nSiap kirim ke seluruh Indonesia. Pesan sekarang di Turja Computer!"
-        };
+        const defaultTemplates = [
+            { id: "temp_1", title: "Template 1 – Promo Laptop Second Lenovo ThinkPad", content: "Sedang mencari laptop berkualitas dengan harga terjangkau?\nLenovo ThinkPad X390 ini bisa jadi pilihan terbaik Anda.\nIntel Core i5 Gen 8, RAM 8GB DDR4, SSD 256GB NVMe, layar 13.3 inci Full HD.\nCocok untuk kerja, kuliah, sekolah, maupun bisnis.\nHarga hanya 4 jutaan!\nStok terbatas, segera hubungi Turja Computer.", isDefault: true },
+            { id: "temp_2", title: "Template 2 – Flash Sale Laptop Murah Hari Ini", content: "FLASH SALE HARI INI DI TURJA COMPUTER!\nDiskon besar-besaran untuk laptop secondhand rasa baru.\nIntel Core i7, RAM 16GB, SSD 512GB cuma 5 jutaan!\nGaransi toko 1 bulan full sparepart.\nJangan sampai kehabisan, buruan chat WhatsApp sekarang!", isDefault: true },
+            { id: "temp_3", title: "Template 3 – Laptop Second Teruji & Garansi", content: "Siapa bilang laptop second tidak berkualitas?\nLaptop di Turja Computer sudah melalui 20 titik inspeksi ketat dan siap pakai.\nBodi mulus, baterai awet, performa kencang untuk kerja dan gaming.\nDapatkan unit terbaikmu dengan harga miring hanya hari ini!", isDefault: true },
+            { id: "temp_4", title: "Template 4 – Laptop Pelajar / Kuliah Hemat", content: "Butuh laptop murah untuk sekolah atau kuliah online?\nTurja Computer punya solusinya!\nLaptop slim ringan, layar Full HD jernih, baterai tahan lama.\nHarga mulai dari 2 jutaan saja.\nSudah terinstall Windows dan Office original siap pakai!", isDefault: true },
+            { id: "temp_5", title: "Template 5 – Laptop Kantoran / Bisnis High-Spec", content: "Untuk kebutuhan kerja profesional dan bisnis tanpa lelet.\nPerkenalkan laptop bisnis ultra-durable dengan spesifikasi tinggi.\nProsesor kencang, RAM 16GB multitasking lancar, bodi kokoh standar militer.\nHubungi Turja Computer untuk penawaran spesial perusahaan.", isDefault: true },
+            { id: "temp_6", title: "Template 6 – Promo PC Gaming Rakitan Intel/Ryzen", content: "PROMO SPECIAL PC GAMING RAKITAN!\nMain Game AAA dan Edit Video 4K tanpa patah-patah.\nIntel Core i5 Gen 12, VGA RTX 3060, RAM 16GB RGB, SSD NVMe 1TB.\nSiap kirim ke seluruh Indonesia. Pesan sekarang di Turja Computer!", isDefault: true }
+        ];
+        let customTemplates = JSON.parse(localStorage.getItem('tc_custom_templates') || '[]');
 
         // Initialize App on DOM Load
         window.addEventListener('DOMContentLoaded', () => {
+            renderTemplateDropdown();
+            renderTemplatesManager();
             updateScriptStats();
             renderProfiles();
             renderHistoryTable();
             renderDashboardHistory();
+            checkApiKeyStatus();
+            loadLocalBranding();
+            syncAllFromGoogleSheet(false);
         });
+
+        // Google Sheet Database Config
+        const DEFAULT_SPREADSHEET_ID = "1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA";
+
+        function getSpreadsheetId() {
+            return localStorage.getItem('tc_spreadsheet_id') || DEFAULT_SPREADSHEET_ID;
+        }
+
+        function getGSheetUrl() {
+            return localStorage.getItem('tc_gsheet_url') || "";
+        }
+
+        function updateSpreadsheetBadge() {
+            const sheetInput = document.getElementById('gsheet-spreadsheet-id');
+            const urlInput = document.getElementById('gsheet-webapp-url');
+            const badge = document.getElementById('sheet-connection-badge');
+            const dot = document.getElementById('sheet-connection-dot');
+            const text = document.getElementById('sheet-connection-text');
+
+            if (!sheetInput || !badge) return;
+
+            const currentId = sheetInput.value.trim();
+            const currentUrl = urlInput ? urlInput.value.trim() : "";
+
+            if (currentId.length >= 15) {
+                if (currentUrl && currentUrl.includes('/exec')) {
+                    badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-950/90 text-emerald-400 border border-emerald-600/60";
+                    dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse";
+                    text.innerText = "ID & Web App Terhubung";
+                } else {
+                    badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-950/90 text-cyan-400 border border-cyan-700/60";
+                    dot.className = "w-1.5 h-1.5 rounded-full bg-cyan-400";
+                    text.innerText = "ID Spreadsheet Terhubung";
+                }
+            } else {
+                badge.className = "inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-950/90 text-amber-400 border border-amber-700/60";
+                dot.className = "w-1.5 h-1.5 rounded-full bg-amber-400";
+                text.innerText = "ID Spreadsheet Belum Valid";
+            }
+        }
+
+        async function postToGoogleSheet(payload) {
+            const url = getGSheetUrl();
+            if (!url) return false;
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ spreadsheetId: getSpreadsheetId(), ...payload })
+                });
+                return true;
+            } catch (err) {
+                console.error("Gagal mengirim ke Google Sheet:", err);
+                return false;
+            }
+        }
+
+        async function syncAllFromGoogleSheet(showNotification = false) {
+            const url = getGSheetUrl();
+            if (!url) {
+                if (showNotification) showToast("Masukkan URL Web App Google Apps Script di menu Settings!", "warning");
+                return;
+            }
+            if (showNotification) showToast("Menyinkronkan data dari Google Sheet...", "info");
+            try {
+                const res = await fetch(`${url}?action=getAll&spreadsheetId=${encodeURIComponent(getSpreadsheetId())}`);
+                const data = await res.json();
+                if (data.status === 'success') {
+                    if (Array.isArray(data.history)) {
+                        const localMap = new Map(historyData.map(item => [String(item.id), item]));
+                        historyData = data.history.map(remoteItem => {
+                            const localMatch = localMap.get(String(remoteItem.id));
+                            return {
+                                ...remoteItem,
+                                audioBase64: (localMatch && localMatch.audioBase64) ? localMatch.audioBase64 : null,
+                                audioUrl: remoteItem.audioUrl || (localMatch ? localMatch.audioUrl : "")
+                            };
+                        });
+                        localStorage.setItem('tc_voice_history', JSON.stringify(historyData));
+                        renderHistoryTable();
+                        renderDashboardHistory();
+                    }
+                    if (Array.isArray(data.profiles) && data.profiles.length > 0) {
+                        voiceProfiles = data.profiles;
+                        localStorage.setItem('tc_voice_profiles', JSON.stringify(voiceProfiles));
+                        renderProfiles();
+                    }
+                    if (data.branding && (data.branding.name || data.branding.wa)) {
+                        localStorage.setItem('tc_branding', JSON.stringify(data.branding));
+                        applyBrandingToInputs(data.branding);
+                    }
+                    if (Array.isArray(data.templates)) {
+                        customTemplates = data.templates;
+                        localStorage.setItem('tc_custom_templates', JSON.stringify(customTemplates));
+                        renderTemplateDropdown();
+                        renderTemplatesManager();
+                    }
+                    if (showNotification) showToast("Database berhasil disinkronkan dari Google Sheet!", "success");
+                }
+            } catch (err) {
+                console.error("Sync error:", err);
+                if (showNotification) showToast("Gagal mengambil data dari Google Sheet. Pastikan URL Web App benar.", "error");
+            }
+        }
+
+        function loadLocalBranding() {
+            const saved = JSON.parse(localStorage.getItem('tc_branding') || 'null');
+            if (saved) applyBrandingToInputs(saved);
+        }
+
+        function applyBrandingToInputs(b) {
+            if (b.name) document.getElementById('brand-name').value = b.name;
+            if (b.wa) document.getElementById('brand-wa').value = b.wa;
+            if (b.address) document.getElementById('brand-address').value = b.address;
+            if (b.cta) document.getElementById('brand-cta-template').value = b.cta;
+        }
+
+        // API Key Management for Vercel / Self-Hosting
+        function getActiveApiKey() {
+            return localStorage.getItem('tc_gemini_api_key') || "";
+        }
+
+        function checkApiKeyStatus() {
+            const key = getActiveApiKey();
+            const sheetId = getSpreadsheetId();
+            const gsheetUrl = getGSheetUrl();
+            const input = document.getElementById('gemini-api-key-input');
+            const sheetInput = document.getElementById('gsheet-spreadsheet-id');
+            const gsheetInput = document.getElementById('gsheet-webapp-url');
+            const dot = document.getElementById('api-status-dot');
+            const text = document.getElementById('api-status-text');
+
+            if (input) input.value = key;
+            if (sheetInput) sheetInput.value = sheetId;
+            if (gsheetInput) gsheetInput.value = gsheetUrl;
+            updateSpreadsheetBadge();
+
+            if (key && key.trim().length > 10) {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-500";
+                text.innerText = gsheetUrl ? "API & Sheet Aktif" : "API Key Aktif";
+                text.className = "text-emerald-400 font-medium";
+            } else if (gsheetUrl) {
+                dot.className = "w-2 h-2 rounded-full bg-cyan-500";
+                text.innerText = "Sheet Aktif (Set API)";
+                text.className = "text-cyan-400 font-medium";
+            } else {
+                dot.className = "w-2 h-2 rounded-full bg-amber-500";
+                text.innerText = "Cek API Key";
+                text.className = "text-slate-300";
+            }
+        }
+
+        function saveGeminiApiKey() {
+            const val = document.getElementById('gemini-api-key-input').value.trim();
+            const sheetIdVal = document.getElementById('gsheet-spreadsheet-id').value.trim() || DEFAULT_SPREADSHEET_ID;
+            const gsheetVal = document.getElementById('gsheet-webapp-url').value.trim();
+
+            if (val) localStorage.setItem('tc_gemini_api_key', val);
+            localStorage.setItem('tc_spreadsheet_id', sheetIdVal);
+
+            if (gsheetVal) {
+                if (!gsheetVal.includes('/exec')) {
+                    return showToast("URL Web App harus berakhiran '/exec'!", "error");
+                }
+                localStorage.setItem('tc_gsheet_url', gsheetVal);
+            } else {
+                localStorage.removeItem('tc_gsheet_url');
+            }
+
+            postToGoogleSheet({ 
+                action: 'saveSettings', 
+                settings: { apiKey: val, spreadsheetId: sheetIdVal, gsheetUrl: gsheetVal } 
+            });
+
+            checkApiKeyStatus();
+            showToast("Konfigurasi API & Google Sheet berhasil disimpan!", "success");
+            if (gsheetVal) syncAllFromGoogleSheet(true);
+        }
+
+        function clearGeminiApiKey() {
+            localStorage.removeItem('tc_gemini_api_key');
+            localStorage.removeItem('tc_spreadsheet_id');
+            localStorage.removeItem('tc_gsheet_url');
+            document.getElementById('gemini-api-key-input').value = '';
+            document.getElementById('gsheet-spreadsheet-id').value = DEFAULT_SPREADSHEET_ID;
+            document.getElementById('gsheet-webapp-url').value = '';
+            checkApiKeyStatus();
+            showToast("Konfigurasi direset ke Spreadsheet ID default.", "info");
+        }
+
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('gemini-api-key-input');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.className = "fa-solid fa-eye-slash";
+            } else {
+                input.type = "password";
+                icon.className = "fa-solid fa-eye";
+            }
+        }
 
         // Tab Switching Logic
         function switchTab(tabId) {
-            const tabs = ['dashboard', 'generator', 'script-ai', 'profiles', 'history', 'branding'];
+            const tabs = ['dashboard', 'generator', 'script-ai', 'templates', 'profiles', 'history', 'branding', 'settings'];
             tabs.forEach(t => {
                 document.getElementById(`tab-${t}`).classList.add('hidden');
                 document.getElementById(`nav-${t}`)?.classList.remove('bg-brand-red', 'text-white');
@@ -912,9 +1264,11 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 dashboard: 'Dashboard Utama',
                 generator: 'Studio Voice Over Generator',
                 'script-ai': 'AI Script Writer',
+                templates: 'Kelola Template Iklan',
                 profiles: 'Voice Profiles Store',
                 history: 'Riwayat Voice Over',
-                branding: 'Branding Toko'
+                branding: 'Branding Toko',
+                settings: 'API Key & Settings'
             };
             document.getElementById('page-title').innerHTML = `<i class="fa-solid fa-grip-vertical text-brand-red"></i> ${titles[tabId]}`;
         }
@@ -927,19 +1281,233 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         function updateScriptStats() {
             const text = document.getElementById('ad-script-input').value;
             const charCount = text.length;
-            // Approx 15 chars per second for Indonesian speech
             const estSeconds = Math.ceil(charCount / 15);
 
             document.getElementById('char-count').innerText = charCount;
             document.getElementById('est-duration').innerText = estSeconds;
         }
 
-        function loadTemplate(key) {
-            if(templates[key]) {
-                document.getElementById('ad-script-input').value = templates[key];
-                updateScriptStats();
-                showToast("Template berhasil dimuat!", "success");
+        function renderTemplateDropdown() {
+            const select = document.getElementById('template-select');
+            const currentVal = select.value;
+            const allTemplates = [...defaultTemplates, ...customTemplates];
+            
+            select.innerHTML = `<option value="">-- Pilih Template Turja Computer (${allTemplates.length}) --</option>` +
+                allTemplates.map(t => `<option value="${t.id}">${t.isDefault ? '' : '⭐ '}${t.title}</option>`).join('');
+            
+            if (currentVal && allTemplates.some(t => String(t.id) === String(currentVal))) {
+                select.value = currentVal;
             }
+            updateDeleteTemplateButton();
+        }
+
+        function updateDeleteTemplateButton() {
+            const val = document.getElementById('template-select').value;
+            const btn = document.getElementById('btn-delete-template');
+            const isCustom = customTemplates.some(t => String(t.id) === String(val));
+            if (isCustom) {
+                btn.classList.remove('hidden');
+            } else {
+                btn.classList.add('hidden');
+            }
+        }
+
+        function loadTemplate(key) {
+            updateDeleteTemplateButton();
+            if (!key) return;
+            const allTemplates = [...defaultTemplates, ...customTemplates];
+            const found = allTemplates.find(t => String(t.id) === String(key));
+            if(found) {
+                document.getElementById('ad-script-input').value = found.content;
+                updateScriptStats();
+                showToast(`Template "${found.title}" dimuat!`, "success");
+            }
+        }
+
+        function saveCustomTemplate() {
+            const content = document.getElementById('ad-script-input').value.trim();
+            if (!content) return showToast("Tulis script iklan terlebih dahulu sebelum menyimpannya sebagai template!", "warning");
+
+            const firstLine = content.split('\n')[0].replace(/\[.*?\]/g, '').trim();
+            const defaultTitle = firstLine.length > 35 ? firstLine.substring(0, 35) + "..." : (firstLine || "Template Custom");
+            
+            const newTemplate = {
+                id: "tpl_" + Date.now(),
+                title: "Custom – " + defaultTitle,
+                content: content,
+                isDefault: false
+            };
+
+            customTemplates.push(newTemplate);
+            localStorage.setItem('tc_custom_templates', JSON.stringify(customTemplates));
+            renderTemplateDropdown();
+            renderTemplatesManager();
+            document.getElementById('template-select').value = newTemplate.id;
+            updateDeleteTemplateButton();
+
+            postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
+                if (success) {
+                    showToast("Template Iklan disimpan ke Google Sheet!", "success");
+                } else {
+                    showToast("Template tersimpan lokal (Cek URL Google Sheet di Settings).", "warning");
+                }
+            });
+        }
+
+        function deleteSelectedTemplate() {
+            const id = document.getElementById('template-select').value;
+            if (!id) return;
+            
+            customTemplates = customTemplates.filter(t => String(t.id) !== String(id));
+            localStorage.setItem('tc_custom_templates', JSON.stringify(customTemplates));
+            renderTemplateDropdown();
+            renderTemplatesManager();
+            
+            postToGoogleSheet({ action: 'deleteTemplate', id: id });
+            showToast("Template kustom dihapus.", "info");
+        }
+
+        // KELOLA TEMPLATE IKLAN MANAGER FUNCTIONS
+        function renderTemplatesManager() {
+            const grid = document.getElementById('templates-manager-grid');
+            if (!grid) return;
+
+            const allTemplates = [...defaultTemplates, ...customTemplates];
+            grid.innerHTML = allTemplates.map(t => `
+                <div class="bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-xl p-4 flex flex-col justify-between space-y-3 transition">
+                    <div class="space-y-2">
+                        <div class="flex items-start justify-between gap-2">
+                            <h4 class="font-bold text-slate-100 text-sm leading-snug">${t.title}</h4>
+                            ${t.isDefault 
+                                ? '<span class="shrink-0 text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded border border-slate-700">Bawaan</span>' 
+                                : '<span class="shrink-0 text-[10px] bg-indigo-950 text-indigo-300 px-2 py-0.5 rounded border border-indigo-800/50">⭐ Kustom</span>'}
+                        </div>
+                        <p class="text-slate-400 text-xs whitespace-pre-line line-clamp-4 bg-slate-900/70 p-2.5 rounded-lg border border-slate-800/80 font-sans leading-relaxed">${t.content}</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                        <button onclick="useTemplateFromManager('${t.id}')" class="flex-1 bg-brand-red hover:bg-brand-redhover text-white font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition">
+                            <i class="fa-solid fa-microphone"></i> Gunakan Script
+                        </button>
+                        <button onclick="openTemplateForm('${t.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 px-3 rounded-lg border border-slate-700 flex items-center gap-1 transition" title="${t.isDefault ? 'Duplikat & Edit' : 'Edit Template'}">
+                            <i class="fa-solid fa-pen"></i> ${t.isDefault ? 'Duplikat' : 'Edit'}
+                        </button>
+                        ${!t.isDefault ? `
+                            <button onclick="deleteTemplateFromManager('${t.id}')" class="bg-rose-950/70 hover:bg-rose-900 text-rose-300 font-semibold py-2 px-3 rounded-lg border border-rose-800/50 transition" title="Hapus Template">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function useTemplateFromManager(id) {
+            const allTemplates = [...defaultTemplates, ...customTemplates];
+            const found = allTemplates.find(t => String(t.id) === String(id));
+            if (found) {
+                document.getElementById('ad-script-input').value = found.content;
+                updateScriptStats();
+                switchTab('generator');
+                document.getElementById('template-select').value = found.id;
+                updateDeleteTemplateButton();
+                showToast(`Template "${found.title}" siap digunakan!`, "success");
+            }
+        }
+
+        function openTemplateForm(id = null) {
+            const box = document.getElementById('template-editor-box');
+            const titleHeader = document.getElementById('template-form-title');
+            const inputId = document.getElementById('edit-template-id');
+            const inputTitle = document.getElementById('edit-template-title');
+            const inputContent = document.getElementById('edit-template-content');
+
+            box.classList.remove('hidden');
+
+            if (id) {
+                const allTemplates = [...defaultTemplates, ...customTemplates];
+                const found = allTemplates.find(t => String(t.id) === String(id));
+                if (found) {
+                    if (found.isDefault) {
+                        titleHeader.innerHTML = '<i class="fa-solid fa-copy"></i> Duplikat & Sesuaikan Template Bawaan';
+                        inputId.value = '';
+                        inputTitle.value = found.title + ' (Custom)';
+                        inputContent.value = found.content;
+                    } else {
+                        titleHeader.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edit Template Kustom';
+                        inputId.value = found.id;
+                        inputTitle.value = found.title;
+                        inputContent.value = found.content;
+                    }
+                }
+            } else {
+                titleHeader.innerHTML = '<i class="fa-solid fa-plus-circle"></i> Tambah Template Baru';
+                inputId.value = '';
+                inputTitle.value = '';
+                inputContent.value = '';
+            }
+            inputTitle.focus();
+        }
+
+        function closeTemplateForm() {
+            document.getElementById('template-editor-box').classList.add('hidden');
+        }
+
+        function saveTemplateFromManager() {
+            const editId = document.getElementById('edit-template-id').value;
+            const title = document.getElementById('edit-template-title').value.trim();
+            const content = document.getElementById('edit-template-content').value.trim();
+
+            if (!title || !content) {
+                return showToast("Judul dan isi script template wajib diisi!", "warning");
+            }
+
+            if (editId) {
+                const idx = customTemplates.findIndex(t => String(t.id) === String(editId));
+                if (idx !== -1) {
+                    customTemplates[idx].title = title;
+                    customTemplates[idx].content = content;
+                    
+                    localStorage.setItem('tc_custom_templates', JSON.stringify(customTemplates));
+                    renderTemplateDropdown();
+                    renderTemplatesManager();
+                    closeTemplateForm();
+
+                    // Hapus lama & tambahkan versi update ke Google Sheet
+                    postToGoogleSheet({ action: 'deleteTemplate', id: editId }).then(() => {
+                        postToGoogleSheet({ action: 'addTemplate', template: customTemplates[idx] });
+                    });
+                    showToast("Perubahan template berhasil disimpan!", "success");
+                }
+            } else {
+                const newTemplate = {
+                    id: "tpl_" + Date.now(),
+                    title: title,
+                    content: content,
+                    isDefault: false
+                };
+                customTemplates.push(newTemplate);
+                localStorage.setItem('tc_custom_templates', JSON.stringify(customTemplates));
+                renderTemplateDropdown();
+                renderTemplatesManager();
+                closeTemplateForm();
+
+                postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
+                    if (success) {
+                        showToast("Template baru disimpan ke Google Sheet!", "success");
+                    } else {
+                        showToast("Template tersimpan lokal (Cek URL Sheet di Settings).", "warning");
+                    }
+                });
+            }
+        }
+
+        function deleteTemplateFromManager(id) {
+            customTemplates = customTemplates.filter(t => String(t.id) !== String(id));
+            localStorage.setItem('tc_custom_templates', JSON.stringify(customTemplates));
+            renderTemplateDropdown();
+            renderTemplatesManager();
+            postToGoogleSheet({ action: 'deleteTemplate', id: id });
+            showToast("Template berhasil dihapus.", "info");
         }
 
         function insertTag(tag) {
@@ -965,35 +1533,70 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         }
 
         function appendBrandingCTA() {
-            const wa = document.getElementById('brand-wa').value;
+            const storeName = document.getElementById('brand-name').value || "Turja Computer";
+            const wa = document.getElementById('brand-wa').value || "0856-4260-0190";
+            const address = document.getElementById('brand-address').value || "Pakisputih Kedungwuni Pekalongan";
             const ctaOpt = document.getElementById('brand-cta-template').value;
-            let ctaText = "\nHubungi Turja Computer sekarang di WhatsApp " + wa;
-            if(ctaOpt === "2") ctaText = "\nStok terbatas! Hubungi WhatsApp " + wa + " sekarang sebelum kehabisan.";
-            if(ctaOpt === "3") ctaText = "\nKunjungi Turja Computer atau hubungi WA " + wa + " hari ini!";
+            let ctaText = `\nHubungi ${storeName} sekarang juga di WhatsApp ${wa}.`;
+            if(ctaOpt === "2") ctaText = `\nStok terbatas! Klik WhatsApp ${wa} untuk klaim promo ${storeName} hari ini.`;
+            if(ctaOpt === "3") ctaText = `\nKunjungi toko ${storeName} di ${address}, atau hubungi WhatsApp ${wa} sebelum kehabisan!`;
 
             document.getElementById('ad-script-input').value += ctaText;
             updateScriptStats();
             showToast("CTA Toko ditambahkan!", "success");
         }
+        async function saveBrandingConfig() {
+            const branding = {
+                name: document.getElementById('brand-name').value.trim(),
+                wa: document.getElementById('brand-wa').value.trim(),
+                address: document.getElementById('brand-address').value.trim(),
+                cta: document.getElementById('brand-cta-template').value
+            };
+            localStorage.setItem('tc_branding', JSON.stringify(branding));
 
-        // Gender Voice Selection Toggle
-        function toggleVoiceGender(gender) {
-            if(gender === 'male') {
-                document.getElementById('male-voices-list').classList.remove('hidden');
-                document.getElementById('female-voices-list').classList.add('hidden');
-                document.getElementById('btn-voice-male').className = 'py-1.5 rounded-md text-center bg-brand-red text-white shadow';
-                document.getElementById('btn-voice-female').className = 'py-1.5 rounded-md text-center text-slate-400 hover:text-white';
+            const btn = document.getElementById('btn-save-branding');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan ke Google Sheet...';
+            }
+
+            const success = await postToGoogleSheet({ action: 'saveBranding', branding: branding });
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan & Sync ke Google Sheet';
+            }
+
+            if (success) {
+                showToast("Branding Toko berhasil disimpan ke tab 'Branding' Google Sheet!", "success");
             } else {
-                document.getElementById('male-voices-list').classList.add('hidden');
-                document.getElementById('female-voices-list').classList.remove('hidden');
-                document.getElementById('btn-voice-female').className = 'py-1.5 rounded-md text-center bg-brand-red text-white shadow';
-                document.getElementById('btn-voice-male').className = 'py-1.5 rounded-md text-center text-slate-400 hover:text-white';
+                showToast("Branding tersimpan lokal. Isi URL Web App Google Sheet di menu Settings untuk sync cloud.", "warning");
             }
         }
 
         function updatePitchLabel(val) {
             const labels = { "1": "Sangat Rendah", "2": "Rendah", "3": "Natural", "4": "Tinggi", "5": "Sangat Tinggi" };
             document.getElementById('val-pitch').innerText = labels[val] || "Natural";
+        }
+
+        // Toggle Male / Female Voice List
+        function toggleVoiceGender(gender) {
+            const maleList = document.getElementById('male-voices-list');
+            const femaleList = document.getElementById('female-voices-list');
+            const btnMale = document.getElementById('btn-voice-male');
+            const btnFemale = document.getElementById('btn-voice-female');
+
+            if (gender === 'male') {
+                maleList.classList.remove('hidden');
+                femaleList.classList.add('hidden');
+                btnMale.className = "py-1.5 rounded-md text-center bg-brand-red text-white shadow";
+                btnFemale.className = "py-1.5 rounded-md text-center text-slate-400 hover:text-white";
+            } else {
+                femaleList.classList.remove('hidden');
+                maleList.classList.add('hidden');
+                btnFemale.className = "py-1.5 rounded-md text-center bg-brand-red text-white shadow";
+                btnMale.className = "py-1.5 rounded-md text-center text-slate-400 hover:text-white";
+            }
         }
 
         // Preset Quick Configs (Point 4)
@@ -1047,7 +1650,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             let script = document.getElementById('ad-script-input').value;
             if(!script) return showToast("Masukkan teks terlebih dahulu!", "warning");
 
-            // Smart regex detection for computer terms
             script = script.replace(/(Lenovo|ThinkPad|Intel Core|i3|i5|i7|i9|Ryzen|RAM|SSD|NVMe|DDR4|Full HD|RTX \d+)/gi, "[Strong Emphasis] $1 [Normal]");
             script = script.replace(/(\d+GB|\d+TB|\d+ jutaan|Rp[\d\.]+)/gi, "[Excited] $1 [Normal]");
             script = script.replace(/(Hubungi|Stok terbatas|Garansi toko)/gi, "[Pause Short] $1");
@@ -1087,6 +1689,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             const originalText = textarea.value;
             if(!originalText) return showToast("Masukkan script yang ingin di-rewrite!", "warning");
 
+            const apiKey = getActiveApiKey();
             showToast("AI sedang menulis ulang script...", "info");
 
             const prompt = `Bertindaklah sebagai Copywriter Marketing Komputer & Elektronik Profesional.
@@ -1101,7 +1704,7 @@ Ketentuan:
 3. Berikan output HANYA teks script hasil rewrite tanpa pengantar/tanda petik.`;
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -1109,6 +1712,9 @@ Ketentuan:
                     })
                 });
                 const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error.message || "API Key tidak valid");
+                }
                 const rewritten = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 if(rewritten) {
                     textarea.value = rewritten.trim();
@@ -1117,7 +1723,7 @@ Ketentuan:
                 }
             } catch(e) {
                 console.error(e);
-                showToast("Gagal merewrite script dengan AI.", "error");
+                showToast("Gagal rewrite: " + e.message + " (Cek menu API Key)", "error");
             }
         }
 
@@ -1131,6 +1737,7 @@ Ketentuan:
 
             if(!product) return showToast("Masukkan nama produk!", "warning");
 
+            const apiKey = getActiveApiKey();
             const btn = document.getElementById('btn-ai-script-gen');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Meracik Script Iklan...';
             btn.disabled = true;
@@ -1150,7 +1757,7 @@ Format Script:
 Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -1158,6 +1765,9 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                     })
                 });
                 const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error.message || "API Key diperlukan");
+                }
                 const resultScript = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
                 if(resultScript) {
@@ -1167,7 +1777,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                 }
             } catch(e) {
                 console.error(e);
-                showToast("Gagal membuat script iklan AI.", "error");
+                showToast("Gagal membuat script: " + e.message + " (Cek API Key)", "error");
             } finally {
                 btn.innerHTML = '<i class="fa-solid fa-sparkles"></i> RACIK SCRIPT IKLAN DENGAN AI';
                 btn.disabled = false;
@@ -1182,11 +1792,43 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             showToast("Script berhasil ditransfer ke Generator!", "success");
         }
 
+        function saveAIScriptAsTemplate() {
+            const content = document.getElementById('ai-script-output').innerText.trim();
+            if (!content) return showToast("Hasil script AI masih kosong!", "warning");
+
+            const productName = document.getElementById('ai-script-product').value.trim();
+            const firstLine = content.split('\n')[0].replace(/\[.*?\]/g, '').trim();
+            const titleLabel = productName ? `AI – ${productName}` : (firstLine.length > 35 ? `AI – ${firstLine.substring(0, 35)}...` : `AI – ${firstLine || 'Script Promo'}`);
+
+            const newTemplate = {
+                id: "tpl_" + Date.now(),
+                title: titleLabel,
+                content: content,
+                isDefault: false
+            };
+
+            customTemplates.push(newTemplate);
+            localStorage.setItem('tc_custom_templates', JSON.stringify(customTemplates));
+            renderTemplateDropdown();
+            renderTemplatesManager();
+            document.getElementById('template-select').value = newTemplate.id;
+            updateDeleteTemplateButton();
+
+            postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
+                if (success) {
+                    showToast(`Template "${titleLabel}" disimpan ke Google Sheet!`, "success");
+                } else {
+                    showToast(`Template "${titleLabel}" tersimpan lokal (Cek URL Sheet di Settings).`, "warning");
+                }
+            });
+        }
+
         // MAIN VOICE GENERATION ENGINE (GEMINI 2.5 TTS)
         async function generateVoiceOver() {
             const scriptRaw = document.getElementById('ad-script-input').value;
             if(!scriptRaw.trim()) return showToast("Tulis script promosi iklan terlebih dahulu!", "warning");
 
+            const apiKey = getActiveApiKey();
             const selectedVoiceRadio = document.querySelector('input[name="selected_voice"]:checked');
             const voiceLabel = selectedVoiceRadio ? selectedVoiceRadio.value : "Pria - Natural";
             const geminiVoice = voiceMapping[voiceLabel] || "Fenrir";
@@ -1200,10 +1842,18 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             const energy = document.getElementById('input-energy').value;
 
             const btn = document.getElementById('btn-generate-main');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-lg"></i> <span>MENGOLAH SUARA NATURAL AI...</span>';
+            btn.classList.add('animate-pulse', 'ring-2', 'ring-rose-400/50');
+            btn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>MENGOLAH SUARA NATURAL AI...</span>
+            `;
             btn.disabled = true;
 
-            // Prompt TTS with Style Guidance for natural speech
+            await new Promise(resolve => setTimeout(resolve, 50));
+
             const ttsPrompt = `Bicaralah sebagai pengisi suara iklan profesional Indonesia dengan gaya ${expression}, tingkat energi ${energy}, kecepatan ${speed}x, dan pembawaan natural, meyakinkan, serta tidak kaku:\n\n${formattedText}`;
 
             const payload = {
@@ -1220,12 +1870,22 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             };
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 const result = await response.json();
+
+                if (result.error) {
+                    if (result.error.code === 400 || result.error.code === 403 || !apiKey) {
+                        showToast("API Key belum diisi atau tidak valid! Buka menu 'API Key & Settings'.", "error");
+                        switchTab('settings');
+                        return;
+                    }
+                    throw new Error(result.error.message);
+                }
+
                 const part = result?.candidates?.[0]?.content?.parts?.[0];
                 const audioBase64 = part?.inlineData?.data;
                 const mimeType = part?.inlineData?.mimeType || "";
@@ -1234,11 +1894,9 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                     const sampleRateMatch = mimeType.match(/rate=(\d+)/);
                     const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
 
-                    // Decode Base64 Raw PCM16 to Web Audio Buffer
                     const pcmData = base64ToArrayBuffer(audioBase64);
                     const pcm16 = new Int16Array(pcmData);
 
-                    // Initialize Audio Context & Synthesis
                     if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
                     
                     currentAudioBuffer = audioContext.createBuffer(1, pcm16.length, sampleRate);
@@ -1247,28 +1905,23 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                         channelData[i] = pcm16[i] / 32768.0;
                     }
 
-                    // Render Dynamic Waveform UI
                     renderWaveform(channelData);
-
-                    // Save to History
                     saveToHistory(scriptRaw, voiceLabel, currentAudioBuffer.duration);
 
-                    // Show Player Container
                     document.getElementById('audio-player-card').classList.remove('hidden');
                     document.getElementById('player-time').innerText = `00:00 / ${formatTime(currentAudioBuffer.duration)}`;
                     
                     showToast("Suara Iklan AI Berhasil Dibuat!", "success");
-
-                    // Auto-play preview
                     playAudioBuffer();
                 } else {
-                    showToast("Respon audio tidak tersedia dari server.", "error");
+                    showToast("Respon audio kosong. Pastikan API Key memiliki akses ke model Gemini 2.5 TTS.", "error");
                 }
             } catch(err) {
                 console.error(err);
-                showToast("Terjadi kesalahan saat meng-generate suara.", "error");
+                showToast("Error: " + (err.message || "Gagal menghubungi server Gemini."), "error");
             } finally {
-                btn.innerHTML = '<i class="fa-solid fa-play text-lg"></i> <span>BUAT SUARA (GENERATE VOICE)</span>';
+                btn.classList.remove('animate-pulse', 'ring-2', 'ring-rose-400/50');
+                btn.innerHTML = '<i class="fa-solid fa-play text-lg"></i> <span>BUAT SUARA</span>';
                 btn.disabled = false;
             }
         }
@@ -1283,7 +1936,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             audioSourceNode = audioContext.createBufferSource();
             audioSourceNode.buffer = currentAudioBuffer;
 
-            // Voice Gain
             const voiceVol = parseFloat(document.getElementById('vol-voice').value) / 100;
             const voiceGain = audioContext.createGain();
             voiceGain.gain.value = voiceVol;
@@ -1303,7 +1955,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                 document.getElementById('audio-seekbar').value = 0;
             };
 
-            // Animate Seekbar & Waveform
             updateSeekbarLoop();
         }
 
@@ -1334,7 +1985,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
         }
 
         function seekAudio(val) {
-            // Seek visualization sync
             if(currentAudioBuffer) {
                 const targetTime = (val / 100) * currentAudioBuffer.duration;
                 document.getElementById('player-time').innerText = `${formatTime(targetTime)} / ${formatTime(currentAudioBuffer.duration)}`;
@@ -1384,17 +2034,91 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
         // HISTORY STORAGE & UI
         function saveToHistory(script, voice, duration) {
+            const audioWavBlob = currentAudioBuffer ? audioBufferToWav(currentAudioBuffer) : null;
+            
+            if (audioWavBlob) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    const base64Audio = reader.result;
+                    pushItemToHistoryStore(script, voice, formatTime(duration), base64Audio);
+                };
+                reader.readAsDataURL(audioWavBlob);
+            } else {
+                pushItemToHistoryStore(script, voice, formatTime(duration), null);
+            }
+        }
+
+        async function pushItemToHistoryStore(script, voice, durationStr, base64Audio) {
+            const itemId = Date.now();
             const item = {
-                id: Date.now(),
-                title: script.slice(0, 35) + '...',
+                id: itemId,
+                title: script.slice(0, 45) + (script.length > 45 ? '...' : ''),
+                fullScript: script,
                 voice: voice,
-                duration: formatTime(duration),
-                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+                duration: durationStr,
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                audioBase64: base64Audio,
+                audioUrl: ""
             };
             historyData.unshift(item);
-            localStorage.setItem('tc_voice_history', JSON.stringify(historyData));
+            try {
+                localStorage.setItem('tc_voice_history', JSON.stringify(historyData));
+            } catch (e) {
+                // Jika kuota localStorage penuh karena file audio besar, simpan versi ringkas di lokal
+                const trimmed = historyData.map((h, idx) => idx > 4 ? { ...h, audioBase64: null } : h);
+                localStorage.setItem('tc_voice_history', JSON.stringify(trimmed));
+            }
             renderHistoryTable();
             renderDashboardHistory();
+
+            // Kirim ke Google Sheet & Google Drive (via Apps Script)
+            const gsheetUrl = getGSheetUrl();
+            if (gsheetUrl) {
+                try {
+                    const res = await fetch(gsheetUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({
+                            spreadsheetId: getSpreadsheetId(),
+                            action: 'addHistory',
+                            item: {
+                                id: item.id,
+                                title: item.title,
+                                fullScript: item.fullScript,
+                                voice: item.voice,
+                                duration: item.duration,
+                                date: item.date,
+                                audioBase64: base64Audio
+                            }
+                        })
+                    });
+                    const data = await res.json();
+                    if (data && data.audioUrl) {
+                        const target = historyData.find(h => String(h.id) === String(itemId));
+                        if (target) {
+                            target.audioUrl = data.audioUrl;
+                            localStorage.setItem('tc_voice_history', JSON.stringify(historyData));
+                            renderHistoryTable();
+                            renderDashboardHistory();
+                        }
+                        showToast("Audio tersimpan ke Google Drive & Spreadsheet!", "success");
+                    }
+                } catch (err) {
+                    // Fallback jika CORS memblokir pembacaan response
+                    postToGoogleSheet({
+                        action: 'addHistory',
+                        item: {
+                            id: item.id,
+                            title: item.title,
+                            fullScript: item.fullScript,
+                            voice: item.voice,
+                            duration: item.duration,
+                            date: item.date,
+                            audioBase64: base64Audio
+                        }
+                    });
+                }
+            }
         }
 
         function renderHistoryTable() {
@@ -1403,44 +2127,161 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                 tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500 italic">Belum ada riwayat voice over.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = historyData.map(h => `
+            tbody.innerHTML = historyData.map(h => {
+                const hasPlayable = Boolean(h.audioBase64 || h.audioUrl);
+                return `
                 <tr class="hover:bg-slate-950/60 border-b border-slate-800/50">
-                    <td class="p-3 font-semibold text-slate-100">${h.title}</td>
+                    <td class="p-3">
+                        <div class="font-semibold text-slate-100">${h.title}</div>
+                        <div class="mt-1 flex items-center gap-2">
+                            ${h.audioBase64 ? '<span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-1.5 py-0.5 rounded"><i class="fa-solid fa-check"></i> Audio Siap</span>' : ''}
+                            ${h.audioUrl ? `<a href="${h.audioUrl}" target="_blank" class="text-[10px] text-cyan-400 hover:underline"><i class="fa-brands fa-google-drive"></i> Drive Link</a>` : ''}
+                        </div>
+                    </td>
                     <td class="p-3"><span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[10px]">${h.voice}</span></td>
                     <td class="p-3 font-mono">${h.duration}</td>
                     <td class="p-3 text-slate-400 text-[11px]">${h.date}</td>
-                    <td class="p-3 text-right space-x-2">
-                        <button onclick="deleteHistoryItem(${h.id})" class="text-rose-400 hover:text-rose-300"><i class="fa-solid fa-trash"></i></button>
+                    <td class="p-3 text-right">
+                        <div class="inline-flex items-center gap-2">
+                            <button onclick="playHistoryAudio(${h.id})" id="btn-play-hist-${h.id}" class="px-2.5 py-1.5 rounded-lg ${hasPlayable ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-800/60' : 'bg-slate-800 text-slate-400'} transition flex items-center gap-1 text-[11px] font-semibold" title="${hasPlayable ? 'Putar Audio' : 'Muat Script'}">
+                                <i class="fa-solid ${hasPlayable ? 'fa-play' : 'fa-arrow-up-right-from-square'}"></i>
+                                <span>${hasPlayable ? 'Play' : 'Muat'}</span>
+                            </button>
+                            ${hasPlayable ? `
+                            <button onclick="downloadHistoryAudio(${h.id})" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 transition flex items-center gap-1 text-[11px] font-semibold" title="Download Audio">
+                                <i class="fa-solid fa-download"></i>
+                                <span>Download</span>
+                            </button>` : ''}
+                            <button onclick="deleteHistoryItem(${h.id})" class="p-1.5 rounded-lg text-rose-400 hover:bg-rose-950/60 transition" title="Hapus">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
+        }
+
+        let currentHistoryAudio = null;
+        let currentPlayingHistoryId = null;
+
+        function playHistoryAudio(id) {
+            const item = historyData.find(h => String(h.id) === String(id));
+            if (!item) return;
+
+            const audioSource = item.audioBase64 || item.audioUrl;
+
+            if (!audioSource) {
+                if (item.fullScript) {
+                    document.getElementById('ad-script-input').value = item.fullScript;
+                    updateScriptStats();
+                    switchTab('generator');
+                    showToast("Audio belum tersimpan. Script dimuat ke Generator untuk dibuat ulang!", "info");
+                } else {
+                    showToast("File audio tidak tersedia dalam riwayat ini.", "warning");
+                }
+                return;
+            }
+
+            if (currentHistoryAudio && String(currentPlayingHistoryId) === String(id)) {
+                stopHistoryAudio();
+                return;
+            }
+
+            stopHistoryAudio();
+
+            try {
+                currentHistoryAudio = new Audio(audioSource);
+                currentPlayingHistoryId = id;
+
+                const btn = document.getElementById(`btn-play-hist-${id}`);
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i> <span>Stop</span>';
+
+                currentHistoryAudio.onended = () => {
+                    stopHistoryAudio();
+                };
+
+                currentHistoryAudio.onerror = () => {
+                    stopHistoryAudio();
+                    if (item.audioUrl) {
+                        window.open(item.audioUrl, '_blank');
+                    } else {
+                        showToast("Gagal memutar audio riwayat.", "error");
+                    }
+                };
+
+                currentHistoryAudio.play();
+                showToast(`Memutar audio: "${item.title}"`, "info");
+            } catch (e) {
+                console.error(e);
+                showToast("Gagal memutar audio riwayat.", "error");
+            }
+        }
+
+        function stopHistoryAudio() {
+            if (currentHistoryAudio) {
+                currentHistoryAudio.pause();
+                currentHistoryAudio.currentTime = 0;
+                currentHistoryAudio = null;
+            }
+            if (currentPlayingHistoryId) {
+                const prevBtn = document.getElementById(`btn-play-hist-${currentPlayingHistoryId}`);
+                if (prevBtn) prevBtn.innerHTML = '<i class="fa-solid fa-play"></i> <span>Play</span>';
+                currentPlayingHistoryId = null;
+            }
+        }
+
+        function downloadHistoryAudio(id) {
+            const item = historyData.find(h => String(h.id) === String(id));
+            if (!item) return;
+
+            if (item.audioBase64) {
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = item.audioBase64;
+                a.download = `TC_VoiceAds_${item.id}.wav`;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => a.remove(), 1000);
+                showToast("Audio riwayat berhasil didownload!", "success");
+            } else if (item.audioUrl) {
+                window.open(item.audioUrl, '_blank');
+                showToast("Membuka file audio dari Google Drive untuk diunduh!", "info");
+            } else {
+                showToast("File audio tidak tersedia untuk didownload.", "warning");
+            }
         }
 
         function renderDashboardHistory() {
             const container = document.getElementById('dashboard-history-preview');
             if(historyData.length === 0) return;
 
-            container.innerHTML = historyData.slice(0, 3).map(h => `
+            container.innerHTML = historyData.slice(0, 3).map(h => {
+                const hasPlayable = Boolean(h.audioBase64 || h.audioUrl);
+                return `
                 <div class="flex items-center justify-between p-2.5 bg-slate-950 rounded-lg border border-slate-800">
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-lg bg-brand-red/20 text-brand-red flex items-center justify-center">
-                            <i class="fa-solid fa-volume-high text-xs"></i>
-                        </div>
+                        <button onclick="playHistoryAudio(${h.id})" class="w-8 h-8 rounded-lg ${hasPlayable ? 'bg-brand-red/20 hover:bg-brand-red text-brand-red hover:text-white' : 'bg-slate-800 text-slate-400'} flex items-center justify-center transition" title="Putar Audio">
+                            <i class="fa-solid fa-play text-xs"></i>
+                        </button>
                         <div>
                             <div class="font-bold text-slate-200 text-xs">${h.title}</div>
                             <div class="text-[10px] text-slate-500">${h.voice} • ${h.duration}</div>
                         </div>
                     </div>
-                    <span class="text-[10px] text-slate-400">${h.date}</span>
+                    <div class="flex items-center gap-2">
+                        ${hasPlayable ? `<button onclick="downloadHistoryAudio(${h.id})" class="text-emerald-400 hover:text-emerald-300 text-xs p-1" title="Download"><i class="fa-solid fa-download"></i></button>` : ''}
+                        <span class="text-[10px] text-slate-400">${h.date}</span>
+                    </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function deleteHistoryItem(id) {
-            historyData = historyData.filter(h => h.id !== id);
+            historyData = historyData.filter(h => String(h.id) !== String(id));
             localStorage.setItem('tc_voice_history', JSON.stringify(historyData));
             renderHistoryTable();
             renderDashboardHistory();
+            postToGoogleSheet({ action: 'deleteHistory', id: id });
             showToast("Item riwayat dihapus.", "info");
         }
 
@@ -1449,6 +2290,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             localStorage.removeItem('tc_voice_history');
             renderHistoryTable();
             renderDashboardHistory();
+            postToGoogleSheet({ action: 'clearHistory' });
             showToast("Semua riwayat dibersihkan.", "info");
         }
 
@@ -1470,7 +2312,14 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             voiceProfiles.push(profile);
             localStorage.setItem('tc_voice_profiles', JSON.stringify(voiceProfiles));
             renderProfiles();
-            showToast("Voice Profile berhasil disimpan!", "success");
+            
+            postToGoogleSheet({ action: 'addProfile', profile: profile }).then(success => {
+                if(success) {
+                    showToast("Voice Profile berhasil disimpan & disinkronkan ke Google Sheet!", "success");
+                } else {
+                    showToast("Profile tersimpan lokal (Gagal sync Sheet, cek URL Web App)", "warning");
+                }
+            });
         }
 
         function renderProfiles() {
@@ -1499,7 +2348,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
         }
 
         function applyProfile(id) {
-            const p = voiceProfiles.find(x => x.id === id);
+            const p = voiceProfiles.find(x => String(x.id) === String(id));
             if(p) {
                 document.getElementById('input-speed').value = p.speed;
                 document.getElementById('input-pitch').value = p.pitch;
@@ -1513,14 +2362,11 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
         }
 
         function deleteProfile(id) {
-            voiceProfiles = voiceProfiles.filter(x => x.id !== id);
+            voiceProfiles = voiceProfiles.filter(x => String(x.id) !== String(id));
             localStorage.setItem('tc_voice_profiles', JSON.stringify(voiceProfiles));
             renderProfiles();
+            postToGoogleSheet({ action: 'deleteProfile', id: id });
             showToast("Profile dihapus.", "info");
-        }
-
-        function saveBrandingConfig() {
-            showToast("Pengaturan Branding Toko disimpan!", "success");
         }
 
         // UTILITY FUNCTIONS
@@ -1534,10 +2380,19 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             return bytes.buffer;
         }
 
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            const len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
         function audioBufferToWav(buffer) {
             const numChannels = buffer.numberOfChannels;
             const sampleRate = buffer.sampleRate;
-            const format = 1; // PCM
             const bitDepth = 16;
 
             let result;
@@ -1570,34 +2425,20 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             const buffer = new ArrayBuffer(44 + dataSize);
             const view = new DataView(buffer);
 
-            /* RIFF identifier */
             writeString(view, 0, 'RIFF');
-            /* RIFF chunk length */
             view.setUint32(4, 36 + dataSize, true);
-            /* RIFF type */
             writeString(view, 8, 'WAVE');
-            /* format chunk identifier */
             writeString(view, 12, 'fmt ');
-            /* format chunk length */
             view.setUint32(16, 16, true);
-            /* sample format (raw) */
             view.setUint16(20, 1, true);
-            /* channel count */
             view.setUint16(22, numChannels, true);
-            /* sample rate */
             view.setUint32(24, sampleRate, true);
-            /* byte rate (sample rate * block align) */
             view.setUint32(28, sampleRate * blockAlign, true);
-            /* block align */
             view.setUint16(32, blockAlign, true);
-            /* bits per sample */
             view.setUint16(34, bitDepth, true);
-            /* data chunk identifier */
             writeString(view, 36, 'data');
-            /* data chunk length */
             view.setUint32(40, dataSize, true);
 
-            // Write PCM samples
             let offset = 44;
             for (let i = 0; i < samples.length; i++, offset += 2) {
                 const s = Math.max(-1, Math.min(1, samples[i]));
