@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Voice Generator</title>
+    <title>TC Voice Ads – AI Voice Generator</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -142,7 +142,7 @@
     <aside id="app-sidebar" class="fixed md:static inset-y-0 left-0 w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 z-40 transform -translate-x-full md:translate-x-0 h-screen overflow-y-auto overflow-x-hidden">
         <div class="w-64 sidebar-inner">
             <!-- Logo Brand -->
-            <div class="p-5 flex items-center justify-between border-b border-slate-800/60 sidebar-header">
+            <div class="p-5 flex items-center justify-between sidebar-header">
                 <div onclick="toggleSidebar()" title="Klik untuk menciutkan / menampilkan sidebar" class="flex items-center space-x-3 cursor-pointer group select-none">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-rose-500 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-red-900/40 shrink-0 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-microphone-lines"></i>
@@ -205,7 +205,7 @@
     <main class="flex-1 bg-slate-950 flex flex-col min-h-screen md:h-screen md:overflow-y-auto relative w-full">
 
         <!-- Top Header Status Bar -->
-        <header class="bg-slate-950/95 backdrop-blur-md border-b border-slate-900 px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 gap-3">
+        <header class="bg-slate-950/95 backdrop-blur-md px-4 sm:px-6 py-3.5 flex items-center justify-between sticky top-0 z-20 gap-3">
             <div class="flex items-center space-x-3 min-w-0">
                 <button onclick="toggleSidebar()" title="Tampilkan / Sembunyikan Sidebar" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-brand-red/60 text-slate-300 hover:text-white flex items-center justify-center shrink-0 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
@@ -232,88 +232,87 @@
                 <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-800 p-6 sm:p-8 shadow-2xl">
                     <div class="absolute -left-10 -bottom-10 w-72 h-72 bg-brand-red/15 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="flex flex-col lg:flex-row items-center justify-start gap-8 relative z-10">
-                        <!-- Visual Ilustrasi Studio AI Voice Over (Posisi Paling Kiri) -->
+                        <!-- Visual Ilustrasi Studio AI Voice Over (Transparan & Lebih Menarik) -->
                         <div class="shrink-0 flex items-center justify-center w-full lg:w-auto">
-                            <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-gradient-to-b from-slate-900/95 to-slate-950 border border-slate-700/70 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center justify-between p-5 backdrop-blur-md group hover:border-brand-red/60 transition-all duration-300 overflow-hidden">
-                                <!-- Efek Cahaya Neon Belakang -->
-                                <div class="absolute -top-12 -left-12 w-40 h-40 bg-brand-red/25 rounded-full blur-2xl pointer-events-none group-hover:bg-brand-red/35 transition"></div>
-                                <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                            <div class="relative w-64 h-64 sm:w-72 sm:h-72 bg-transparent flex flex-col items-center justify-center group select-none">
+                                <!-- Ambient Glow Halus Menyatu dengan Banner -->
+                                <div class="absolute inset-6 bg-gradient-to-tr from-brand-red/25 via-purple-500/15 to-cyan-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
 
-                                <!-- Header Mini Studio Window -->
-                                <div class="w-full flex items-center justify-between z-10">
-                                    <div class="flex items-center gap-1.5">
-                                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Ilustrasi SVG Studio Condenser Mic + Laptop + Soundwave -->
-                                <svg class="w-44 h-40 drop-shadow-[0_12px_28px_rgba(229,9,20,0.45)] group-hover:scale-105 transition-transform duration-300 z-10" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Ilustrasi SVG Transparan: Studio Podcast Mic + Laptop Tech + AI Soundwaves -->
+                                <svg class="w-60 h-52 drop-shadow-[0_14px_28px_rgba(229,9,20,0.35)] group-hover:scale-105 transition-transform duration-300 z-10" viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <defs>
-                                        <linearGradient id="studioMicBody" x1="92" y1="26" x2="148" y2="112" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0%" stop-color="#FF4D5E"/>
-                                            <stop offset="50%" stop-color="#E50914"/>
-                                            <stop offset="100%" stop-color="#88040B"/>
+                                        <linearGradient id="micCapsuleGrad" x1="115" y1="22" x2="165" y2="112" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#FF5E6C"/>
+                                            <stop offset="45%" stop-color="#E50914"/>
+                                            <stop offset="100%" stop-color="#7F040B"/>
                                         </linearGradient>
-                                        <linearGradient id="ringGlow" x1="50" y1="20" x2="190" y2="150" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0%" stop-color="#F43F5E" stop-opacity="0.6"/>
-                                            <stop offset="50%" stop-color="#818CF8" stop-opacity="0.3"/>
-                                            <stop offset="100%" stop-color="#E50914" stop-opacity="0.6"/>
-                                        </linearGradient>
-                                        <linearGradient id="metalStand" x1="120" y1="108" x2="120" y2="178" gradientUnits="userSpaceOnUse">
-                                            <stop offset="0%" stop-color="#CBD5E1"/>
-                                            <stop offset="100%" stop-color="#475569"/>
-                                        </linearGradient>
-                                        <linearGradient id="waveGrad" x1="20" y1="70" x2="220" y2="70" gradientUnits="userSpaceOnUse">
+                                        <linearGradient id="cyberRing" x1="40" y1="20" x2="240" y2="180" gradientUnits="userSpaceOnUse">
                                             <stop offset="0%" stop-color="#38BDF8"/>
                                             <stop offset="50%" stop-color="#F43F5E"/>
                                             <stop offset="100%" stop-color="#A855F7"/>
                                         </linearGradient>
+                                        <linearGradient id="chromeArm" x1="140" y1="105" x2="140" y2="178" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#F8FAFC"/>
+                                            <stop offset="50%" stop-color="#94A3B8"/>
+                                            <stop offset="100%" stop-color="#334155"/>
+                                        </linearGradient>
+                                        <linearGradient id="laptopScreen" x1="55" y1="115" x2="225" y2="175" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.35"/>
+                                            <stop offset="100%" stop-color="#A855F7" stop-opacity="0.15"/>
+                                        </linearGradient>
                                     </defs>
 
-                                    <!-- Lingkaran Orbit Studio -->
-                                    <circle cx="120" cy="76" r="68" stroke="url(#ringGlow)" stroke-width="1.5" stroke-dasharray="5 5"/>
-                                    <circle cx="120" cy="76" r="52" stroke="#F43F5E" stroke-opacity="0.22" stroke-width="1.5"/>
+                                    <!-- Lingkaran Radar / Orbit Transparan -->
+                                    <circle cx="140" cy="86" r="76" stroke="url(#cyberRing)" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.75"/>
+                                    <circle cx="140" cy="86" r="58" stroke="#F43F5E" stroke-opacity="0.3" stroke-width="1.5"/>
 
-                                    <!-- Gelombang Frekuensi Audio Kiri -->
-                                    <rect x="20" y="68" width="4" height="18" rx="2" fill="#38BDF8" opacity="0.8"/>
-                                    <rect x="29" y="56" width="4" height="42" rx="2" fill="#818CF8" opacity="0.9"/>
-                                    <rect x="38" y="48" width="4" height="58" rx="2" fill="#F43F5E"/>
-                                    <rect x="47" y="60" width="4" height="34" rx="2" fill="#FB7185" opacity="0.85"/>
-                                    <rect x="56" y="66" width="4" height="22" rx="2" fill="#FDA4AF" opacity="0.7"/>
+                                    <!-- Siluet Laptop Tech Transparan di Belakang Bawah -->
+                                    <path d="M62 128C62 122.477 66.4772 118 72 118H208C213.523 118 218 122.477 218 128V172H62V128Z" fill="url(#laptopScreen)" stroke="url(#cyberRing)" stroke-width="1.5"/>
+                                    <path d="M44 172H236L226 182H54L44 172Z" fill="#94A3B8" fill-opacity="0.45" stroke="#CBD5E1" stroke-opacity="0.5" stroke-width="1"/>
 
-                                    <!-- Gelombang Frekuensi Audio Kanan -->
-                                    <rect x="180" y="66" width="4" height="22" rx="2" fill="#FDA4AF" opacity="0.7"/>
-                                    <rect x="189" y="60" width="4" height="34" rx="2" fill="#FB7185" opacity="0.85"/>
-                                    <rect x="198" y="48" width="4" height="58" rx="2" fill="#F43F5E"/>
-                                    <rect x="207" y="56" width="4" height="42" rx="2" fill="#A855F7" opacity="0.9"/>
-                                    <rect x="216" y="68" width="4" height="18" rx="2" fill="#38BDF8" opacity="0.8"/>
+                                    <!-- Gelombang Audio Sayap Kiri -->
+                                    <rect x="22" y="76" width="4.5" height="20" rx="2.25" fill="#38BDF8"/>
+                                    <rect x="32" y="62" width="4.5" height="48" rx="2.25" fill="#818CF8"/>
+                                    <rect x="42" y="50" width="4.5" height="72" rx="2.25" fill="#F43F5E"/>
+                                    <rect x="52" y="64" width="4.5" height="44" rx="2.25" fill="#FB7185"/>
+                                    <rect x="62" y="74" width="4.5" height="24" rx="2.25" fill="#38BDF8" opacity="0.85"/>
 
-                                    <!-- Badan Mikrofon Kondensor -->
-                                    <rect x="96" y="28" width="48" height="82" rx="24" fill="url(#studioMicBody)"/>
-                                    <!-- Jaring / Mesh Kapsul -->
-                                    <line x1="104" y1="48" x2="136" y2="48" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
-                                    <line x1="102" y1="60" x2="138" y2="60" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
-                                    <line x1="102" y1="72" x2="138" y2="72" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
-                                    <line x1="104" y1="84" x2="136" y2="84" stroke="#0F172A" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round"/>
-                                    <!-- Highlight Kilau 3D -->
-                                    <rect x="104" y="36" width="6" height="44" rx="3" fill="#FFFFFF" fill-opacity="0.28"/>
+                                    <!-- Gelombang Audio Sayap Kanan -->
+                                    <rect x="213.5" y="74" width="4.5" height="24" rx="2.25" fill="#38BDF8" opacity="0.85"/>
+                                    <rect x="223.5" y="64" width="4.5" height="44" rx="2.25" fill="#FB7185"/>
+                                    <rect x="233.5" y="50" width="4.5" height="72" rx="2.25" fill="#F43F5E"/>
+                                    <rect x="243.5" y="62" width="4.5" height="48" rx="2.25" fill="#A855F7"/>
+                                    <rect x="253.5" y="76" width="4.5" height="20" rx="2.25" fill="#38BDF8"/>
 
-                                    <!-- Shockmount & Penyangga Mikrofon -->
-                                    <path d="M80 78C80 100.091 97.9086 118 120 118C142.091 118 160 100.091 160 78" stroke="url(#metalStand)" stroke-width="5.5" stroke-linecap="round"/>
-                                    <line x1="120" y1="118" x2="120" y2="154" stroke="url(#metalStand)" stroke-width="5.5" stroke-linecap="round"/>
-                                    <!-- Base Meja Studio -->
-                                    <rect x="86" y="152" width="68" height="9" rx="4.5" fill="#64748B"/>
-                                    <rect x="96" y="148" width="48" height="5" rx="2.5" fill="#94A3B8"/>
+                                    <!-- Pop Filter Lingkaran Transparan -->
+                                    <circle cx="114" cy="70" r="24" fill="#0F172A" fill-opacity="0.35" stroke="#38BDF8" stroke-width="2"/>
+                                    <circle cx="114" cy="70" r="19" stroke="#38BDF8" stroke-opacity="0.35" stroke-width="1" stroke-dasharray="2 2"/>
+                                    <path d="M102 90L116 116" stroke="#64748B" stroke-width="3" stroke-linecap="round"/>
 
-                                    <!-- Sparkle AI Bintang -->
-                                    <path d="M168 32L170.5 38.5L177 41L170.5 43.5L168 50L165.5 43.5L159 41L165.5 38.5L168 32Z" fill="#FBBF24"/>
-                                    <path d="M72 26L73.5 30L77.5 31.5L73.5 33L72 37L70.5 33L66.5 31.5L70.5 30L72 26Z" fill="#38BDF8"/>
+                                    <!-- Kapsul Mikrofon Studio 3D -->
+                                    <rect x="116" y="24" width="48" height="86" rx="24" fill="url(#micCapsuleGrad)"/>
+                                    <!-- Grill Garis Mikrofon -->
+                                    <line x1="124" y1="45" x2="156" y2="45" stroke="#0F172A" stroke-opacity="0.45" stroke-width="3.2" stroke-linecap="round"/>
+                                    <line x1="122" y1="57" x2="158" y2="57" stroke="#0F172A" stroke-opacity="0.45" stroke-width="3.2" stroke-linecap="round"/>
+                                    <line x1="122" y1="69" x2="158" y2="69" stroke="#0F172A" stroke-opacity="0.45" stroke-width="3.2" stroke-linecap="round"/>
+                                    <line x1="124" y1="81" x2="156" y2="81" stroke="#0F172A" stroke-opacity="0.45" stroke-width="3.2" stroke-linecap="round"/>
+                                    <!-- Kilau Kaca 3D -->
+                                    <rect x="125" y="32" width="6" height="48" rx="3" fill="#FFFFFF" fill-opacity="0.35"/>
+
+                                    <!-- Shockmount & Tiang Penyangga -->
+                                    <path d="M98 78C98 101.196 116.804 120 140 120C163.196 120 182 101.196 182 78" stroke="url(#chromeArm)" stroke-width="5.5" stroke-linecap="round"/>
+                                    <line x1="140" y1="120" x2="140" y2="162" stroke="url(#chromeArm)" stroke-width="6" stroke-linecap="round"/>
+                                    <rect x="104" y="160" width="72" height="9" rx="4.5" fill="#94A3B8"/>
+
+                                    <!-- Ikon Kilau AI & Notasi Suara -->
+                                    <path d="M196 30L199 38L207 41L199 44L196 52L193 44L185 41L193 38L196 30Z" fill="#FBBF24"/>
+                                    <path d="M84 26L86 31L91 33L86 35L84 40L82 35L77 33L82 31L84 26Z" fill="#38BDF8"/>
+                                    <circle cx="192" cy="104" r="3.5" fill="#F43F5E"/>
+                                    <circle cx="88" cy="106" r="3" fill="#A855F7"/>
                                 </svg>
 
-                                <!-- Animasi Bergerak Waveform Garis Audio -->
-                                <div class="w-full h-11 flex items-center justify-center gap-1 px-3 z-10" aria-hidden="true">
+                                <!-- Animasi Bergerak Waveform Garis Audio (Transparan) -->
+                                <div class="w-full h-10 flex items-center justify-center gap-1.5 px-2 z-10 -mt-1" aria-hidden="true">
                                     <span class="w-1 h-4 rounded-full bg-gradient-to-t from-cyan-500 to-sky-300 hero-wave-line" style="animation-delay: 0.00s;"></span>
                                     <span class="w-1 h-7 rounded-full bg-gradient-to-t from-indigo-500 to-cyan-300 hero-wave-line" style="animation-delay: 0.12s;"></span>
                                     <span class="w-1 h-5 rounded-full bg-gradient-to-t from-rose-600 to-rose-400 hero-wave-line" style="animation-delay: 0.24s;"></span>
@@ -348,7 +347,7 @@
                                 Ubah teks promosi laptop, PC rakitan, printer, dan komputer bekas menjadi suara manusia yang sangat natural, ekspresif, dan berwibawa khusus untuk TikTok, Instagram Reels, Marketplace & WA Status.
                             </p>
                             <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg">
-                                <button onclick="switchTab('generator')" class="w-full justify-center bg-brand-red hover:bg-brand-redhover text-white px-5 py-3 rounded-xl font-bold text-sm shadow-xl shadow-red-950 flex items-center gap-2 transition transform active:scale-95">
+                                <button onclick="switchTab('generator')" class="w-full justify-center bg-brand-red hover:bg-brand-redhover text-white px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2 transition transform active:scale-95">
                                     <i class="fa-solid fa-microphone"></i> Mulai Buat Voice Over
                                 </button>
                                 <button onclick="switchTab('script-ai')" class="w-full justify-center bg-emerald-900/60 hover:bg-emerald-800/70 text-emerald-300 border border-emerald-700/50 px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
@@ -509,21 +508,21 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         </div>
                         <p class="text-xs text-slate-400">Pilih bagaimana AI membaca istilah komputer (e.g. "i5", "RAM 8GB", "SSD 256GB NVMe", "Rp4.000.000"):</p>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                            <label class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 cursor-pointer flex items-center gap-2 hover:border-slate-700">
+                            <label class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 cursor-pointer flex items-center gap-2 hover:border-slate-700 [&:has(input:checked)]:border-brand-red [&:has(input:checked)]:bg-brand-red/10 [&:has(input:checked)]:[&_.font-bold]:text-brand-red transition">
                                 <input type="radio" name="tech_mode" value="natural" checked class="accent-brand-red">
                                 <div>
                                     <div class="font-bold text-slate-200">Secara Natural</div>
                                     <div class="text-[10px] text-slate-500">"i lima", "delapan gigabyte"</div>
                                 </div>
                             </label>
-                            <label class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 cursor-pointer flex items-center gap-2 hover:border-slate-700">
+                            <label class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 cursor-pointer flex items-center gap-2 hover:border-slate-700 [&:has(input:checked)]:border-brand-red [&:has(input:checked)]:bg-brand-red/10 [&:has(input:checked)]:[&_.font-bold]:text-brand-red transition">
                                 <input type="radio" name="tech_mode" value="literal" class="accent-brand-red">
                                 <div>
                                     <div class="font-bold text-slate-200">Sesuai Tulisan Asli</div>
                                     <div class="text-[10px] text-slate-500">Persis seperti karakter ketikan</div>
                                 </div>
                             </label>
-                            <label class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 cursor-pointer flex items-center gap-2 hover:border-slate-700">
+                            <label class="bg-slate-950 border border-slate-800 rounded-lg p-2.5 cursor-pointer flex items-center gap-2 hover:border-slate-700 [&:has(input:checked)]:border-brand-red [&:has(input:checked)]:bg-brand-red/10 [&:has(input:checked)]:[&_.font-bold]:text-brand-red transition">
                                 <input type="radio" name="tech_mode" value="full" class="accent-brand-red">
                                 <div>
                                     <div class="font-bold text-slate-200">Dibacakan Lengkap</div>
@@ -589,8 +588,8 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
                         <!-- Voice Gender Tabs -->
                         <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-medium">
-                            <button onclick="toggleVoiceGender('male')" id="btn-voice-male" class="py-1.5 rounded-md text-center bg-brand-red text-white shadow">Pria (8 Voice)</button>
-                            <button onclick="toggleVoiceGender('female')" id="btn-voice-female" class="py-1.5 rounded-md text-center text-slate-400 hover:text-white">Wanita (8 Voice)</button>
+                            <button onclick="toggleVoiceGender('male')" id="btn-voice-male" class="py-1.5 rounded-md text-center bg-brand-red text-white shadow">Pria</button>
+                            <button onclick="toggleVoiceGender('female')" id="btn-voice-female" class="py-1.5 rounded-md text-center text-slate-400 hover:text-white">Wanita</button>
                         </div>
 
                         <!-- Male Voices Options -->
@@ -1105,7 +1104,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         <div>
                             <label class="block text-slate-300 font-semibold mb-1">Masukkan Google Gemini API Key Anda:</label>
                             <div class="relative">
-                                <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 pr-20 text-slate-100 focus:border-brand-red focus:outline-none font-mono">
+                                <input type="password" id="gemini-api-key-input" placeholder="" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 pr-20 text-slate-100 focus:border-brand-red focus:outline-none font-mono">
                                 <button onclick="toggleApiKeyVisibility()" type="button" class="absolute right-3 top-2.5 text-slate-400 hover:text-white text-xs px-2 py-1">
                                     <i class="fa-solid fa-eye" id="eye-icon"></i>
                                 </button>
@@ -1128,13 +1127,10 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                     </span>
                                 </div>
                                 <input type="text" id="gsheet-spreadsheet-id" oninput="updateSpreadsheetBadge()" placeholder="1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-emerald-400 focus:border-emerald-500 focus:outline-none font-mono">
-                                <p class="text-[11px] text-slate-400 mt-1">
-                                    Default ID: <code class="text-slate-300 bg-slate-950 px-1.5 py-0.5 rounded">1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA</code>
-                                </p>
                             </div>
 
                             <div>
-                                <label class="block text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
+                                <label class="text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
                                     <i class="fa-solid fa-link text-cyan-500"></i> Google Apps Script Web App URL:
                                 </label>
                                 <input type="text" id="gsheet-webapp-url" oninput="updateSpreadsheetBadge()" placeholder="https://script.google.com/macros/s/AKfycb.../exec" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-100 focus:border-emerald-500 focus:outline-none font-mono">
@@ -1145,9 +1141,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                     <div class="flex gap-3">
                         <button onclick="saveGeminiApiKey()" class="flex-1 py-3 bg-brand-red hover:bg-brand-redhover text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
                             <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi
-                        </button>
-                        <button onclick="syncAllFromGoogleSheet(true)" class="px-4 py-3 bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-rotate"></i> Sync Sheet
                         </button>
                         <button onclick="clearGeminiApiKey()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl border border-slate-700 transition">
                             Reset
@@ -1166,7 +1159,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
     <script>
         // Google Spreadsheet & Apps Script Defaults
         const DEFAULT_SPREADSHEET_ID = "1S43Z2MbOvvVrsxf_1wSMs6I_-XyIa905yaDqvYh-coA";
-        const DEFAULT_GSHEET_URL = "";
+        const DEFAULT_GSHEET_URL = "https://script.google.com/macros/s/AKfycbzfT3P-xHfqXUYbiZHEJLBj_OnnZwASKNfVZujzNujokuX-eHyJzyK-LoMK6hVYyN-ucg/exec";
 
         function getSpreadsheetId() {
             return localStorage.getItem('tc_spreadsheet_id') || DEFAULT_SPREADSHEET_ID;
@@ -1524,7 +1517,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             if(found) {
                 document.getElementById('ad-script-input').value = found.content;
                 updateScriptStats();
-                showToast(`Template "${found.title}" dimuat!`, "success");
             }
         }
 
@@ -1860,7 +1852,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             }
             document.getElementById('val-speed').innerText = speed.value + 'x';
             updatePitchLabel(pitch.value);
-            showToast(`Preset Iklan '${type.toUpperCase()}' diterapkan!`, "info");
         }
 
         function applyQuickPreset(cat) {
