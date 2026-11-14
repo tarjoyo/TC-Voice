@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TC Voice Ads – AI Voice Generator</title>
+    <title>AI Voice Generator</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -347,12 +347,12 @@
                             <p class="text-slate-300 text-sm md:text-base leading-relaxed">
                                 Ubah teks promosi laptop, PC rakitan, printer, dan komputer bekas menjadi suara manusia yang sangat natural, ekspresif, dan berwibawa khusus untuk TikTok, Instagram Reels, Marketplace & WA Status.
                             </p>
-                            <div class="pt-2 flex flex-wrap gap-3">
-                                <button onclick="switchTab('generator')" class="bg-brand-red hover:bg-brand-redhover text-white px-6 py-3 rounded-xl font-bold text-sm shadow-xl shadow-red-950 flex items-center gap-2 transition transform active:scale-95">
+                            <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg">
+                                <button onclick="switchTab('generator')" class="w-full justify-center bg-brand-red hover:bg-brand-redhover text-white px-5 py-3 rounded-xl font-bold text-sm shadow-xl shadow-red-950 flex items-center gap-2 transition transform active:scale-95">
                                     <i class="fa-solid fa-microphone"></i> Mulai Buat Voice Over
                                 </button>
-                                <button onclick="switchTab('script-ai')" class="bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
-                                    <i class="fa-solid fa-pen-sparkles text-amber-400"></i> Buat Script Otomatis AI
+                                <button onclick="switchTab('script-ai')" class="w-full justify-center bg-emerald-900/60 hover:bg-emerald-800/70 text-emerald-300 border border-emerald-700/50 px-5 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
+                                    <i class="fa-solid fa-pen-sparkles text-emerald-400"></i> Buat Script Otomatis AI
                                 </button>
                             </div>
                         </div>
@@ -418,21 +418,25 @@
                 <div class="lg:col-span-7 space-y-6">
 
                     <!-- Script Templates & AI Fast Rewrite Toolbar -->
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <label class="text-xs font-semibold text-slate-400"><i class="fa-solid fa-layer-group text-slate-300"></i> Template Iklan:</label>
-                            <select id="template-select" onchange="loadTemplate(this.value)" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-red max-w-xs">
+                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2.5 w-full">
+                            <label class="text-xs font-semibold text-slate-400 shrink-0 flex items-center gap-1.5">
+                                <i class="fa-solid fa-layer-group text-slate-300"></i> Template Iklan:
+                            </label>
+                            <select id="template-select" onchange="loadTemplate(this.value)" class="w-full flex-1 bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-brand-red">
                                 <option value="">-- Pilih Template --</option>
                             </select>
-                            <button onclick="saveCustomTemplate()" class="bg-emerald-900/60 hover:bg-emerald-800/70 text-emerald-300 border border-emerald-700/50 text-xs px-2.5 py-1.5 rounded-lg flex items-center gap-1" title="Simpan script saat ini sebagai template baru ke Google Sheet">
-                                <i class="fa-solid fa-plus"></i> Simpan
-                            </button>
-                            <button onclick="deleteSelectedTemplate()" id="btn-delete-template" class="hidden bg-rose-950/60 hover:bg-rose-900/70 text-rose-300 border border-rose-800/50 text-xs px-2 py-1.5 rounded-lg" title="Hapus template kustom terpilih">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="aiRewriteScript('persuasif')" class="bg-slate-800 hover:bg-slate-700 text-xs text-amber-400 border border-slate-700 px-2.5 py-1.5 rounded-lg flex items-center gap-1">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-800/70">
+                            <div class="flex items-center gap-2">
+                                <button onclick="saveCustomTemplate()" class="bg-emerald-900/60 hover:bg-emerald-800/70 text-emerald-300 border border-emerald-700/50 text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition" title="Simpan script saat ini sebagai template baru ke Google Sheet">
+                                    <i class="fa-solid fa-plus"></i> Simpan
+                                </button>
+                                <button onclick="deleteSelectedTemplate()" id="btn-delete-template" class="hidden bg-rose-950/60 hover:bg-rose-900/70 text-rose-300 border border-rose-800/50 text-xs px-2.5 py-1.5 rounded-lg transition" title="Hapus template kustom terpilih">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                            <button onclick="aiRewriteScript('persuasif')" class="bg-slate-800 hover:bg-slate-700 text-xs text-amber-400 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition">
                                 <i class="fa-solid fa-wand-magic"></i> AI Rewrite
                             </button>
                         </div>
@@ -1462,7 +1466,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
             const titles = {
                 dashboard: 'Dashboard Utama',
-                generator: 'Studio Voice Over Generator',
+                generator: 'Voice Over Generator',
                 'script-ai': 'AI Script Writer',
                 templates: 'Kelola Template Iklan',
                 profiles: 'Voice Profiles Store',
