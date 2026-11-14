@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TC Voice Ads – AI Voice Generator</title>
+    <title>AI Voice Generator ID</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -239,7 +239,7 @@
                                 <div class="absolute inset-6 bg-gradient-to-tr from-brand-red/25 via-purple-500/15 to-cyan-400/20 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
 
                                 <!-- Ilustrasi SVG Transparan: Studio Podcast Mic + Laptop Tech + AI Soundwaves -->
-                                <svg class="w-60 h-52 drop-shadow-[0_14px_28px_rgba(229,9,20,0.35)] group-hover:scale-105 transition-transform duration-300 z-10" viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg class="w-60 h-52 group-hover:scale-105 transition-transform duration-300 z-10" viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <defs>
                                         <linearGradient id="micCapsuleGrad" x1="115" y1="22" x2="165" y2="112" gradientUnits="userSpaceOnUse">
                                             <stop offset="0%" stop-color="#FF5E6C"/>
@@ -1152,8 +1152,8 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         </div>
     </main>
 
-    <!-- Global Toast Notification UI (Centered & Rich Icon Design) -->
-    <div id="toast-container" class="fixed inset-0 pointer-events-none z-50 flex flex-col items-center justify-center p-4 gap-3"></div>
+    <!-- Global Toast Notification UI (Simple & Bottom-Right Position) -->
+    <div id="toast-container" class="fixed bottom-6 right-6 pointer-events-none z-50 flex flex-col items-end justify-end p-2 gap-2.5"></div>
 
     <!-- Application Script Logic -->
     <script>
@@ -1584,8 +1584,8 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         <button onclick="useTemplateFromManager('${t.id}')" class="flex-1 bg-brand-red hover:bg-brand-redhover text-white font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition">
                             <i class="fa-solid fa-microphone"></i> Gunakan Script
                         </button>
-                        <button onclick="openTemplateForm('${t.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 px-3 rounded-lg border border-slate-700 flex items-center gap-1 transition" title="${t.isDefault ? 'Duplikat & Edit' : 'Edit Template'}">
-                            <i class="fa-solid fa-pen"></i> ${t.isDefault ? 'Duplikat' : 'Edit'}
+                        <button onclick="openTemplateForm('${t.id}')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 px-3 rounded-lg border border-slate-700 flex items-center gap-1 transition" title="Edit Template">
+                            <i class="fa-solid fa-pen"></i> Edit
                         </button>
                         ${!t.isDefault ? `
                             <button onclick="deleteTemplateFromManager('${t.id}')" class="bg-rose-950/70 hover:bg-rose-900 text-rose-300 font-semibold py-2 px-3 rounded-lg border border-rose-800/50 transition" title="Hapus Template">
@@ -1624,9 +1624,9 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 const found = allTemplates.find(t => String(t.id) === String(id));
                 if (found) {
                     if (found.isDefault) {
-                        titleHeader.innerHTML = '<i class="fa-solid fa-copy"></i> Duplikat & Sesuaikan Template Bawaan';
-                        inputId.value = '';
-                        inputTitle.value = found.title + ' (Custom)';
+                        titleHeader.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edit Template Bawaan (Menyimpan sebagai Kustom)';
+                        inputId.value = ''; // Kosongkan agar disimpan sebagai template kustom baru yang bisa diedit/dihapus
+                        inputTitle.value = found.title + ' (Edit)';
                         inputContent.value = found.content;
                     } else {
                         titleHeader.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Edit Template Kustom';
@@ -1668,7 +1668,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                     renderTemplatesManager();
                     closeTemplateForm();
 
-                    // Hapus lama & tambahkan versi update ke Google Sheet
                     postToGoogleSheet({ action: 'deleteTemplate', id: editId }).then(() => {
                         postToGoogleSheet({ action: 'addTemplate', template: customTemplates[idx] });
                     });
@@ -2253,23 +2252,36 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
         function saveToHistory(script, voice, duration) {
             const audioWavBlob = currentAudioBuffer ? audioBufferToWav(currentAudioBuffer) : null;
             
+            // Ambil judul dari template aktif atau gunakan fallback standar
+            let titleText = "";
+            const templateSelect = document.getElementById('template-select');
+            if (templateSelect && templateSelect.value) {
+                const selectedOption = templateSelect.options[templateSelect.selectedIndex];
+                if (selectedOption && selectedOption.text) {
+                    titleText = selectedOption.text.replace(/^[⭐\s]+/, '').trim();
+                }
+            }
+            if (!titleText) {
+                titleText = "Voice Over Promo";
+            }
+
             if (audioWavBlob) {
                 const reader = new FileReader();
                 reader.onloadend = function() {
                     const base64Audio = reader.result;
-                    pushItemToHistoryStore(script, voice, formatTime(duration), base64Audio);
+                    pushItemToHistoryStore(script, voice, formatTime(duration), base64Audio, titleText);
                 };
                 reader.readAsDataURL(audioWavBlob);
             } else {
-                pushItemToHistoryStore(script, voice, formatTime(duration), null);
+                pushItemToHistoryStore(script, voice, formatTime(duration), null, titleText);
             }
         }
 
-        async function pushItemToHistoryStore(script, voice, durationStr, base64Audio) {
+        async function pushItemToHistoryStore(script, voice, durationStr, base64Audio, titleText) {
             const itemId = Date.now();
             const item = {
                 id: itemId,
-                title: script.slice(0, 45) + (script.length > 45 ? '...' : ''),
+                title: titleText,
                 fullScript: script,
                 voice: voice,
                 duration: durationStr,
@@ -2725,83 +2737,42 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             
             const configs = {
                 success: {
-                    card: 'border-emerald-500/40 shadow-[0_20px_50px_rgba(16,185,129,0.22)]',
-                    topGlow: 'from-emerald-400 via-teal-400 to-emerald-500',
-                    iconRing: 'ring-emerald-500/30 bg-emerald-500/15 text-emerald-400',
-                    badgeBg: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-                    icon: 'fa-solid fa-circle-check',
-                    title: 'Sukses',
-                    progress: 'bg-gradient-to-r from-emerald-400 to-teal-400'
+                    border: 'border-emerald-500/40',
+                    bg: 'bg-slate-900/95 text-emerald-300',
+                    icon: 'fa-solid fa-circle-check text-emerald-400'
                 },
                 error: {
-                    card: 'border-rose-500/40 shadow-[0_20px_50px_rgba(244,63,94,0.25)]',
-                    topGlow: 'from-rose-500 via-red-500 to-pink-500',
-                    iconRing: 'ring-rose-500/30 bg-rose-500/15 text-rose-400',
-                    badgeBg: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
-                    icon: 'fa-solid fa-circle-exclamation',
-                    title: 'Gagal',
-                    progress: 'bg-gradient-to-r from-rose-500 to-pink-500'
+                    border: 'border-rose-500/40',
+                    bg: 'bg-slate-900/95 text-rose-300',
+                    icon: 'fa-solid fa-circle-exclamation text-rose-400'
                 },
                 warning: {
-                    card: 'border-amber-500/40 shadow-[0_20px_50px_rgba(245,158,11,0.22)]',
-                    topGlow: 'from-amber-400 via-orange-400 to-yellow-500',
-                    iconRing: 'ring-amber-500/30 bg-amber-500/15 text-amber-400',
-                    badgeBg: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-                    icon: 'fa-solid fa-triangle-exclamation',
-                    title: 'Perhatian',
-                    progress: 'bg-gradient-to-r from-amber-400 to-orange-400'
+                    border: 'border-amber-500/40',
+                    bg: 'bg-slate-900/95 text-amber-300',
+                    icon: 'fa-solid fa-triangle-exclamation text-amber-400'
                 },
                 info: {
-                    card: 'border-cyan-500/40 shadow-[0_20px_50px_rgba(6,182,212,0.22)]',
-                    topGlow: 'from-cyan-400 via-blue-500 to-indigo-500',
-                    iconRing: 'ring-cyan-500/30 bg-cyan-500/15 text-cyan-400',
-                    badgeBg: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
-                    icon: 'fa-solid fa-wand-magic-sparkles',
-                    title: 'Info Sistem',
-                    progress: 'bg-gradient-to-r from-cyan-400 to-indigo-400'
+                    border: 'border-cyan-500/40',
+                    bg: 'bg-slate-900/95 text-cyan-300',
+                    icon: 'fa-solid fa-circle-info text-cyan-400'
                 }
             };
 
             const cfg = configs[type] || configs.info;
 
-            toast.className = `pointer-events-auto relative overflow-hidden max-w-sm w-full bg-slate-900/90 backdrop-blur-2xl border ${cfg.card} rounded-3xl p-5 transition-all duration-300 animate-toast-pop`;
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${cfg.border} ${cfg.bg} backdrop-blur-xl shadow-2xl transition-all duration-300 animate-toast-pop max-w-xs`;
             toast.innerHTML = `
-                <!-- Top Neon Accent Line -->
-                <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r ${cfg.topGlow}"></div>
-                
-                <div class="flex items-start gap-4">
-                    <!-- Glowing Ring Icon -->
-                    <div class="w-12 h-12 rounded-2xl ${cfg.iconRing} ring-4 flex items-center justify-center shrink-0 text-xl mt-0.5">
-                        <i class="${cfg.icon}"></i>
-                    </div>
-                    
-                    <!-- Text Content -->
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between gap-2 mb-1">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${cfg.badgeBg}">
-                                ${cfg.title}
-                            </span>
-                            <button onclick="this.closest('.pointer-events-auto').remove()" class="w-6 h-6 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
-                                <i class="fa-solid fa-xmark text-xs"></i>
-                            </button>
-                        </div>
-                        <p class="text-sm text-slate-100 font-medium leading-snug">${message}</p>
-                    </div>
-                </div>
-
-                <!-- Animated Countdown Progress Bar -->
-                <div class="mt-4 w-full h-1 bg-slate-800/90 rounded-full overflow-hidden">
-                    <div class="h-full ${cfg.progress} rounded-full animate-toast-progress"></div>
-                </div>
+                <i class="${cfg.icon} text-base shrink-0"></i>
+                <span class="text-xs font-medium text-slate-200 leading-snug">${message}</span>
             `;
             
             container.appendChild(toast);
 
             setTimeout(() => {
                 toast.style.opacity = '0';
-                toast.style.transform = 'scale(0.92) translateY(8px)';
+                toast.style.transform = 'translateY(8px)';
                 setTimeout(() => toast.remove(), 300);
-            }, 3200);
+            }, 3000);
         }
     </script>
 </body>
