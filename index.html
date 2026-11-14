@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Voice Generator ID</title>
+    <title>AI Voice Generator</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -217,12 +217,15 @@
                 </h2>
             </div>
             <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
-                <button onclick="switchTab('settings')" id="api-status-badge" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-2.5 sm:px-3 py-2 rounded-lg flex items-center gap-2 transition">
+                <button onclick="switchTab('settings')" id="api-status-badge" class="hidden bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs px-2.5 sm:px-3 py-2 rounded-lg flex items-center gap-2 transition">
                     <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0" id="api-status-dot"></span>
                     <span id="api-status-text" class="text-slate-300">Cek API Key</span>
                 </button>
             </div>
         </header>
+
+        <!-- Global Toast Notification UI (Positioned below top header on the right) -->
+        <div id="toast-container" class="absolute top-16 right-6 pointer-events-none z-50 flex flex-col items-end justify-start p-2 gap-2.5"></div>
 
         <!-- Dynamic Content Sections -->
         <div class="p-4 sm:p-6 flex-1">
@@ -230,7 +233,6 @@
             <section id="tab-dashboard" class="space-y-8">
                 <!-- Hero Banner -->
                 <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border border-slate-800 p-6 sm:p-8 shadow-2xl">
-                    <div class="absolute -left-10 -bottom-10 w-72 h-72 bg-brand-red/15 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="flex flex-col lg:flex-row items-center justify-start gap-8 relative z-10">
                         <!-- Visual Ilustrasi Studio AI Voice Over (Transparan & Lebih Menarik) -->
                         <div class="shrink-0 flex items-center justify-center w-full lg:w-auto">
@@ -1152,8 +1154,22 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         </div>
     </main>
 
-    <!-- Global Toast Notification UI (Simple & Bottom-Right Position) -->
-    <div id="toast-container" class="fixed bottom-6 right-6 pointer-events-none z-50 flex flex-col items-end justify-end p-2 gap-2.5"></div>
+    <!-- Global Loading Overlay for Voice Generation -->
+    <div id="generation-loading-overlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex flex-col items-center justify-center space-y-4">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-red to-rose-500 flex items-center justify-center text-white text-2xl shadow-2xl shadow-red-900/60 animate-bounce">
+            <i class="fa-solid fa-microphone-lines"></i>
+        </div>
+        <div class="text-center space-y-1">
+            <h3 class="text-lg font-bold text-white tracking-wide">AI Sedang Meracik Suara Iklan...</h3>
+            <p class="text-xs text-slate-400">Harap tunggu sebentar, sistem sedang memproses sintesis audio profesional.</p>
+        </div>
+        <div class="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden mt-2">
+            <div class="w-full h-full bg-gradient-to-r from-brand-red to-rose-400 animate-pulse"></div>
+        </div>
+    </div>
+
+    <!-- Global Toast Notification UI (Top-Right Position, Fixed Uniform Width, Queue Mode) -->
+    <div id="toast-container" class="fixed top-6 right-6 pointer-events-none z-50 flex flex-col items-end justify-start p-2 gap-2.5"></div>
 
     <!-- Application Script Logic -->
     <script>
@@ -1355,6 +1371,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             const input = document.getElementById('gemini-api-key-input');
             const sheetInput = document.getElementById('gsheet-spreadsheet-id');
             const gsheetInput = document.getElementById('gsheet-webapp-url');
+            const badge = document.getElementById('api-status-badge');
             const dot = document.getElementById('api-status-dot');
             const text = document.getElementById('api-status-text');
 
@@ -1363,18 +1380,23 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             if (gsheetInput) gsheetInput.value = localStorage.getItem('tc_gsheet_url') || DEFAULT_GSHEET_URL;
             updateSpreadsheetBadge();
 
-            if (key && key.trim().length > 10) {
-                dot.className = "w-2 h-2 rounded-full bg-emerald-500";
-                text.innerText = gsheetUrl ? "API & Sheet Aktif" : "API Key Aktif";
-                text.className = "text-emerald-400 font-medium";
-            } else if (gsheetUrl) {
-                dot.className = "w-2 h-2 rounded-full bg-cyan-500";
-                text.innerText = "Sheet Aktif (Set API)";
-                text.className = "text-cyan-400 font-medium";
+            const hasApiKey = Boolean(key && key.trim().length > 10);
+            const hasGSheet = Boolean(gsheetUrl && gsheetUrl.trim().length > 10);
+
+            if (hasApiKey && hasGSheet) {
+                // Sembunyikan badge jika sheet aktif dan API key sudah diisi
+                if (badge) badge.classList.add('hidden');
             } else {
-                dot.className = "w-2 h-2 rounded-full bg-amber-500";
-                text.innerText = "Cek API Key";
-                text.className = "text-slate-300";
+                if (badge) badge.classList.remove('hidden');
+                if (!hasGSheet) {
+                    dot.className = "w-2 h-2 rounded-full bg-rose-500 shrink-0";
+                    text.innerText = "Database Off";
+                    text.className = "text-rose-400 font-medium";
+                } else if (!hasApiKey) {
+                    dot.className = "w-2 h-2 rounded-full bg-amber-500 shrink-0";
+                    text.innerText = "Butuh API Key";
+                    text.className = "text-amber-300 font-medium";
+                }
             }
         }
 
@@ -2058,15 +2080,11 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             const energy = document.getElementById('input-energy').value;
 
             const btn = document.getElementById('btn-generate-main');
+            const loadingOverlay = document.getElementById('generation-loading-overlay');
+            
             btn.classList.add('animate-pulse', 'ring-2', 'ring-rose-400/50');
-            btn.innerHTML = `
-                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>MENGOLAH SUARA</span>
-            `;
             btn.disabled = true;
+            if (loadingOverlay) loadingOverlay.classList.remove('hidden');
 
             await new Promise(resolve => setTimeout(resolve, 50));
 
@@ -2137,8 +2155,8 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                 showToast("Error: " + (err.message || "Gagal menghubungi server Gemini."), "error");
             } finally {
                 btn.classList.remove('animate-pulse', 'ring-2', 'ring-rose-400/50');
-                btn.innerHTML = '<i class="fa-solid fa-play text-lg"></i> <span>BUAT SUARA</span>';
                 btn.disabled = false;
+                if (loadingOverlay) loadingOverlay.classList.add('hidden');
             }
         }
 
@@ -2731,7 +2749,20 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
         }
 
+        // Toast Notification Queue System (Top-Right, Uniform Width, One by One)
+        let toastQueue = [];
+        let isShowingToast = false;
+
         function showToast(message, type = 'info') {
+            toastQueue.push({ message, type });
+            processToastQueue();
+        }
+
+        function processToastQueue() {
+            if (isShowingToast || toastQueue.length === 0) return;
+            isShowingToast = true;
+
+            const { message, type } = toastQueue.shift();
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             
@@ -2760,18 +2791,22 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
             const cfg = configs[type] || configs.info;
 
-            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${cfg.border} ${cfg.bg} backdrop-blur-xl shadow-2xl transition-all duration-300 animate-toast-pop max-w-xs`;
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${cfg.border} ${cfg.bg} backdrop-blur-xl shadow-2xl transition-all duration-300 animate-toast-pop w-80 shrink-0`;
             toast.innerHTML = `
                 <i class="${cfg.icon} text-base shrink-0"></i>
-                <span class="text-xs font-medium text-slate-200 leading-snug">${message}</span>
+                <span class="text-xs font-medium text-slate-200 leading-snug truncate">${message}</span>
             `;
             
             container.appendChild(toast);
 
             setTimeout(() => {
                 toast.style.opacity = '0';
-                toast.style.transform = 'translateY(8px)';
-                setTimeout(() => toast.remove(), 300);
+                toast.style.transform = 'translateY(-8px)';
+                setTimeout(() => {
+                    toast.remove();
+                    isShowingToast = false;
+                    processToastQueue();
+                }, 300);
             }, 3000);
         }
     </script>
