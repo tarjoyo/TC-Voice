@@ -1036,7 +1036,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                                 <tr>
                                     <th class="p-3">Judul</th>
                                     <th class="p-3">Character</th>
-                                    <th class="p-3">Durasi</th>
+                                    <th class="p-3 hidden sm:table-cell">Durasi</th>
                                     <th class="p-3 text-right">Aksi</th>
                                 </tr>
                             </thead>
@@ -2384,7 +2384,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                         </div>
                     </td>
                     <td class="p-3"><span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[10px]">${h.voice}</span></td>
-                    <td class="p-3 font-mono">${cleanDur}</td>
+                    <td class="p-3 font-mono hidden sm:table-cell">${cleanDur}</td>
                     <td class="p-3 text-right">
                         <div class="inline-flex items-center gap-1.5">
                             <button onclick="playHistoryAudio(${h.id})" id="btn-play-hist-${h.id}" class="w-8 h-8 shrink-0 rounded-lg ${hasPlayable ? 'bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-800/60' : 'bg-slate-800 text-slate-400 border border-slate-700'} transition flex items-center justify-center text-xs" title="Putar Audio">
