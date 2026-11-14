@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>user tc</title>
+    <title>AI Voice Generator</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -884,7 +884,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                     <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                         <div>
                             <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-pen-nib text-amber-500"></i> AI Generator Script Iklan Komputer
+                                <i class="fa-solid fa-pen-nib text-amber-500"></i> AI Generator Script
                             </h3>
                             <p class="text-xs text-slate-400 mt-1">Masukkan data spesifikasi laptop/komputer, AI akan meracik teks iklan yang persuasif.</p>
                         </div>
@@ -1001,12 +1001,12 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <div>
                             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-sliders text-emerald-400"></i> Voice Profiles – Konsistensi Suara Toko
+                                <i class="fa-solid fa-sliders text-emerald-400"></i> Voice Profiles
                             </h3>
                             <p class="text-xs text-slate-400 mt-1">Simpan racikan karakter suara favorit Turja Computer agar semua audio promosi berikutnya seragam.</p>
                         </div>
                         <button onclick="saveCurrentVoiceProfile()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-2 rounded-lg flex items-center gap-1.5 shadow">
-                            <i class="fa-solid fa-bookmark"></i> Simpan Setting Saat Ini
+                            <i class="fa-solid fa-bookmark"></i> Simpan
                         </button>
                     </div>
 
@@ -1023,7 +1023,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <div>
                             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i> Riwayat Voice Over Promosi
+                                <i class="fa-solid fa-clock-rotate-left text-cyan-400"></i> Riwayat Voice Over
                             </h3>
                             <p class="text-xs text-slate-400 mt-1">Daftar iklan suara yang telah dibuat dan di-generate.</p>
                         </div>
@@ -1031,14 +1031,14 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-300">
+                        <table class="w-full text-left text-xs text-slate-300 table-auto">
                             <thead class="bg-slate-950 text-slate-400 border-b border-slate-800 uppercase text-[10px]">
                                 <tr>
-                                    <th class="p-3">Judul & Audio Preview</th>
-                                    <th class="p-3">Voice Character</th>
-                                    <th class="p-3">Durasi</th>
-                                    <th class="p-3">Tanggal</th>
-                                    <th class="p-3 text-right">Aksi</th>
+                                    <th class="p-3 w-6/12">Judul & Audio Preview</th>
+                                    <th class="p-3 w-2/12">Voice Character</th>
+                                    <th class="p-3 w-1/12">Durasi</th>
+                                    <th class="p-3 w-2/12">Tanggal</th>
+                                    <th class="p-3 w-1/12 text-right">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="history-table-body" class="divide-y divide-slate-800">
@@ -1087,7 +1087,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
                     <div class="flex flex-wrap gap-3">
                         <button onclick="saveBrandingConfig()" id="btn-save-branding" class="flex-1 py-3 bg-brand-red hover:bg-brand-redhover text-white font-bold text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
-                            <i class="fa-solid fa-floppy-disk"></i> Simpan & Sync ke Google Sheet
+                            <i class="fa-solid fa-floppy-disk"></i> Simpan
                         </button>
                         <button onclick="syncAllFromGoogleSheet(true)" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-semibold text-xs rounded-xl flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-rotate"></i> Muat dari Sheet
@@ -1316,7 +1316,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                             const localMatch = localMap.get(String(remoteItem.id));
                             return {
                                 ...remoteItem,
-                                audioBase64: (localMatch && localMatch.audioBase64) ? localMatch.audioBase64 : null,
+                                audioBase64: remoteItem.audioBase64 || (localMatch ? localMatch.audioBase64 : null),
                                 audioUrl: remoteItem.audioUrl || (localMatch ? localMatch.audioUrl : "")
                             };
                         });
@@ -2374,9 +2374,9 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                 return `
                 <tr class="hover:bg-slate-950/60 border-b border-slate-800/50">
                     <td class="p-3">
-                        <div class="font-semibold text-slate-100">${h.title}</div>
-                        <div class="mt-1 flex items-center gap-2">
-                            ${h.audioBase64 ? '<span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-1.5 py-0.5 rounded"><i class="fa-solid fa-check"></i> Audio Siap</span>' : ''}
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="font-semibold text-slate-100 whitespace-nowrap">${h.title}</span>
+                            ${h.audioBase64 ? '<span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-1.5 py-0.5 rounded whitespace-nowrap"><i class="fa-solid fa-check"></i> Audio Siap</span>' : ''}
                         </div>
                     </td>
                     <td class="p-3"><span class="bg-slate-800 text-slate-300 px-2 py-0.5 rounded text-[10px]">${h.voice}</span></td>
@@ -2409,8 +2409,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             const item = historyData.find(h => String(h.id) === String(id));
             if (!item) return;
 
-            let audioSource = item.audioBase64;
-
             if (currentHistoryAudio && String(currentPlayingHistoryId) === String(id)) {
                 stopHistoryAudio();
                 return;
@@ -2419,23 +2417,12 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             stopHistoryAudio();
 
             try {
-                let playableUrl = "";
-
-                if (audioSource) {
-                    if (audioSource.startsWith('data:')) {
-                        playableUrl = audioSource;
-                    } else if (audioSource.startsWith('RIFF') || audioSource.length > 100) {
-                        // Jika tersimpan sebagai raw string / binary base64
-                        const blob = new Blob([base64ToArrayBuffer(audioSource)], { type: 'audio/wav' });
-                        playableUrl = URL.createObjectURL(blob);
-                    } else {
-                        playableUrl = 'data:audio/wav;base64,' + audioSource;
-                    }
-                } else if (item.audioUrl) {
-                    playableUrl = item.audioUrl;
+                let audioSource = item.audioBase64;
+                if (!audioSource && item.audioUrl) {
+                    audioSource = item.audioUrl;
                 }
 
-                if (!playableUrl) {
+                if (!audioSource) {
                     if (item.fullScript) {
                         document.getElementById('ad-script-input').value = item.fullScript;
                         updateScriptStats();
@@ -2447,51 +2434,55 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                     return;
                 }
 
-                currentHistoryAudio = new Audio();
-                currentHistoryAudio.crossOrigin = "anonymous";
                 currentPlayingHistoryId = id;
-
                 const btn = document.getElementById(`btn-play-hist-${id}`);
                 if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i> <span>Stop</span>';
+
+                // Gunakan HTML5 Audio langsung untuk kompatibilitas pemutaran URL cloud / base64 lintas perangkat
+                currentHistoryAudio = new Audio();
+                currentHistoryAudio.crossOrigin = "anonymous";
+                
+                if (audioSource.startsWith('data:')) {
+                    currentHistoryAudio.src = audioSource;
+                } else if (audioSource.startsWith('http')) {
+                    currentHistoryAudio.src = audioSource;
+                } else if (audioSource.startsWith('RIFF') || audioSource.length > 100) {
+                    const blob = new Blob([base64ToArrayBuffer(audioSource)], { type: 'audio/wav' });
+                    currentHistoryAudio.src = URL.createObjectURL(blob);
+                } else {
+                    const blob = new Blob([base64ToArrayBuffer(audioSource)], { type: 'audio/wav' });
+                    currentHistoryAudio.src = URL.createObjectURL(blob);
+                }
 
                 currentHistoryAudio.onended = () => {
                     stopHistoryAudio();
                 };
 
-                currentHistoryAudio.onerror = async (e) => {
-                    console.warn("Fallback HTML5 Audio, mencoba decode via Web Audio Context...", e);
-                    try {
-                        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                        const response = await fetch(playableUrl);
-                        const arrayBuffer = await response.arrayBuffer();
-                        const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                        
-                        currentAudioBuffer = decodedBuffer;
-                        playAudioBuffer();
-                        currentPlayingHistoryId = id;
-                        if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i> <span>Stop</span>';
-                        return;
-                    } catch (err2) {
-                        console.error("Semua metode pemutaran gagal:", err2);
-                        stopHistoryAudio();
-                        if (item.fullScript) {
-                            document.getElementById('ad-script-input').value = item.fullScript;
-                            updateScriptStats();
-                            switchTab('generator');
-                            showToast("Format audio lama tidak dapat diputar. Script dimuat kembali ke Generator.", "warning");
-                        } else {
-                            showToast("Gagal memutar audio.", "error");
-                        }
+                currentHistoryAudio.onerror = (e) => {
+                    console.warn("HTML5 audio playback error, mencoba fallback Web Audio...", e);
+                    stopHistoryAudio();
+                    if (item.fullScript) {
+                        document.getElementById('ad-script-input').value = item.fullScript;
+                        updateScriptStats();
+                        switchTab('generator');
+                        showToast("Script dimuat kembali ke Generator.", "info");
+                    } else {
+                        showToast("Gagal memutar audio.", "error");
                     }
                 };
 
-                currentHistoryAudio.src = playableUrl;
                 await currentHistoryAudio.play();
-                // Notifikasi sukses pemutaran dihapus sesuai permintaan
+
             } catch (e) {
-                console.error(e);
+                console.error("Audio playback error:", e);
                 stopHistoryAudio();
-                showToast("Gagal memutar audio.", "error");
+                if (item.fullScript) {
+                    document.getElementById('ad-script-input').value = item.fullScript;
+                    updateScriptStats();
+                    switchTab('generator');
+                } else {
+                    showToast("Gagal memutar audio.", "error");
+                }
             }
         }
 
