@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Voice Generator</title>
+    <title>user tc</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -225,7 +225,7 @@
         </header>
 
         <!-- Global Toast Notification UI (Positioned below top header on the right) -->
-        <div id="toast-container" class="absolute top-16 right-6 pointer-events-none z-50 flex flex-col items-end justify-start p-2 gap-2.5"></div>
+        <div id="toast-container" class="fixed top-16 right-4 sm:right-6 pointer-events-none z-50 flex flex-col items-end justify-start p-1 gap-2 w-[calc(100vw-2rem)] max-w-[220px] sm:w-52"></div>
 
         <!-- Dynamic Content Sections -->
         <div class="p-4 sm:p-6 flex-1">
@@ -820,10 +820,13 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
 
                     <!-- Main Generation Controls Button -->
                     <div class="space-y-3">
-                        <button onclick="generateVoiceOver()" id="btn-generate-main" class="w-full py-4 bg-gradient-to-r from-brand-red via-rose-600 to-red-700 hover:from-rose-600 hover:to-brand-red text-white font-extrabold text-base rounded-xl shadow-xl shadow-red-950 flex items-center justify-center gap-3 transition-all duration-200 transform active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed">
+                        <button onclick="generateVoiceOver()" id="btn-generate-main" class="w-full py-4 bg-gradient-to-r from-brand-red via-rose-600 to-red-700 hover:from-rose-600 hover:to-brand-red text-white font-extrabold text-base rounded-xl flex items-center justify-center gap-3 transition-all duration-200 transform active:scale-95 disabled:opacity-80 disabled:cursor-not-allowed">
                             <i class="fa-solid fa-play text-lg"></i>
                             <span>BUAT SUARA</span>
                         </button>
+                        <p class="text-xs text-slate-400 text-center leading-relaxed px-1">
+                            Buat Voice Over Iklan Profesional Dalam Hitungan Detik. Ubah teks promosi laptop, PC rakitan, printer, dan komputer bekas menjadi suara manusia yang sangat natural, ekspresif, dan berwibawa khusus untuk TikTok, Instagram Reels, Marketplace & WA Status.
+                        </p>
                     </div>
 
                     <!-- Audio Player Box & Waveform (Point 12 & 14) -->
@@ -1167,9 +1170,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             <div class="w-full h-full bg-gradient-to-r from-brand-red to-rose-400 animate-pulse"></div>
         </div>
     </div>
-
-    <!-- Global Toast Notification UI (Top-Right Position, Fixed Uniform Width, Queue Mode) -->
-    <div id="toast-container" class="fixed top-6 right-6 pointer-events-none z-50 flex flex-col items-end justify-start p-2 gap-2.5"></div>
 
     <!-- Application Script Logic -->
     <script>
@@ -1564,10 +1564,8 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             updateDeleteTemplateButton();
 
             postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
-                if (success) {
-                    showToast("Template Iklan disimpan ke Google Sheet!", "success");
-                } else {
-                    showToast("Template tersimpan lokal (Cek URL Google Sheet di Settings).", "warning");
+                if (!success) {
+                    showToast("Template tersimpan lokal (Gagal sync Sheet, cek URL Web App di Settings).", "warning");
                 }
             });
         }
@@ -1743,8 +1741,10 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         }
 
         function copyScriptText() {
-            const text = document.getElementById('ad-script-input').value;
+            const textarea = document.getElementById('ad-script-input');
+            const text = textarea.value;
             if(!text) return showToast("Script masih kosong!", "warning");
+            textarea.select();
             document.execCommand('copy');
             showToast("Script berhasil disalin ke clipboard!", "info");
         }
@@ -1784,10 +1784,8 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan & Sync ke Google Sheet';
             }
 
-            if (success) {
-                showToast("Branding Toko berhasil disimpan ke tab 'Branding' Google Sheet!", "success");
-            } else {
-                showToast("Branding tersimpan lokal. Isi URL Web App Google Sheet di menu Settings untuk sync cloud.", "warning");
+            if (!success) {
+                showToast("Branding tersimpan lokal. Gagal sync ke Google Sheet, cek URL Web App di menu Settings.", "warning");
             }
         }
 
@@ -2053,10 +2051,8 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             updateDeleteTemplateButton();
 
             postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
-                if (success) {
-                    showToast(`Template "${titleLabel}" disimpan ke Google Sheet!`, "success");
-                } else {
-                    showToast(`Template "${titleLabel}" tersimpan lokal (Cek URL Sheet di Settings).`, "warning");
+                if (!success) {
+                    showToast("Template tersimpan lokal (Gagal sync ke Google Sheet).", "warning");
                 }
             });
         }
@@ -2270,7 +2266,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
         function saveToHistory(script, voice, duration) {
             const audioWavBlob = currentAudioBuffer ? audioBufferToWav(currentAudioBuffer) : null;
             
-            // Ambil judul dari template aktif atau gunakan fallback standar
+            // Ambil judul dari template aktif atau gunakan fallback standar (hanya judul saja)
             let titleText = "";
             const templateSelect = document.getElementById('template-select');
             if (templateSelect && templateSelect.value) {
@@ -2348,7 +2344,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                             renderHistoryTable();
                             renderDashboardHistory();
                         }
-                        showToast("Audio tersimpan ke Google Drive & Spreadsheet!", "success");
                     }
                 } catch (err) {
                     // Fallback jika CORS memblokir pembacaan response
@@ -2492,7 +2487,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
                 currentHistoryAudio.src = playableUrl;
                 await currentHistoryAudio.play();
-                showToast(`Memutar audio: "${item.title}"`, "info");
+                // Notifikasi sukses pemutaran dihapus sesuai permintaan
             } catch (e) {
                 console.error(e);
                 stopHistoryAudio();
@@ -2602,9 +2597,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             renderProfiles();
             
             postToGoogleSheet({ action: 'addProfile', profile: profile }).then(success => {
-                if(success) {
-                    showToast("Voice Profile berhasil disimpan & disinkronkan ke Google Sheet!", "success");
-                } else {
+                if(!success) {
                     showToast("Profile tersimpan lokal (Gagal sync Sheet, cek URL Web App)", "warning");
                 }
             });
@@ -2654,7 +2647,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             localStorage.setItem('tc_voice_profiles', JSON.stringify(voiceProfiles));
             renderProfiles();
             postToGoogleSheet({ action: 'deleteProfile', id: id });
-            showToast("Profile dihapus.", "info");
         }
 
         // UTILITY FUNCTIONS
@@ -2791,10 +2783,10 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
             const cfg = configs[type] || configs.info;
 
-            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${cfg.border} ${cfg.bg} backdrop-blur-xl shadow-2xl transition-all duration-300 animate-toast-pop w-80 shrink-0`;
+            toast.className = `pointer-events-auto flex items-start gap-2 px-3 py-2 rounded-xl border ${cfg.border} ${cfg.bg} backdrop-blur-xl shadow-2xl transition-all duration-300 animate-toast-pop w-full min-h-[40px] h-auto shrink-0`;
             toast.innerHTML = `
-                <i class="${cfg.icon} text-base shrink-0"></i>
-                <span class="text-xs font-medium text-slate-200 leading-snug truncate">${message}</span>
+                <i class="${cfg.icon} text-xs shrink-0 mt-0.5"></i>
+                <span class="text-[11px] font-medium text-slate-200 leading-snug flex-1 whitespace-normal break-words">${message}</span>
             `;
             
             container.appendChild(toast);
