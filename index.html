@@ -1300,7 +1300,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 if (showNotification) showToast("Masukkan URL Web App Google Apps Script di menu Settings!", "warning");
                 return;
             }
-            if (showNotification) showToast("Menyinkronkan data dari Google Sheet...", "info");
+            if (showNotification) showToast("Menyinkronkan data dari Google Sheet", "info");
             try {
                 const res = await fetch(`${url}?action=getAll&spreadsheetId=${encodeURIComponent(getSpreadsheetId())}`);
                 const data = await res.json();
@@ -1334,7 +1334,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                         renderTemplateDropdown();
                         renderTemplatesManager();
                     }
-                    if (showNotification) showToast("Database berhasil disinkronkan dari Google Sheet!", "success");
+                    if (showNotification) showToast("Berhasil disinkronkan dari Google Sheet!", "success");
                 }
             } catch (err) {
                 console.error("Sync error:", err);
@@ -1418,7 +1418,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             });
 
             checkApiKeyStatus();
-            showToast("Konfigurasi API & Google Sheet berhasil disimpan!", "success");
+            showToast("Konfigurasi API berhasil disimpan!", "success");
             if (gsheetVal) syncAllFromGoogleSheet(true);
         }
 
@@ -1768,7 +1768,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             const btn = document.getElementById('btn-save-branding');
             if (btn) {
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan ke Google Sheet...';
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan ke Google Sheet';
             }
 
             const success = await postToGoogleSheet({ action: 'saveBranding', branding: branding });
