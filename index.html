@@ -224,9 +224,6 @@
             </div>
         </header>
 
-        <!-- Global Toast Notification UI (Positioned below top header on the right) -->
-        <div id="toast-container" class="absolute top-16 right-6 pointer-events-none z-50 flex flex-col items-end justify-start p-2 gap-2.5"></div>
-
         <!-- Dynamic Content Sections -->
         <div class="p-4 sm:p-6 flex-1">
             <!-- SECTION 1: DASHBOARD UTAMA -->
@@ -1027,7 +1024,6 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                             </h3>
                             <p class="text-xs text-slate-400 mt-1">Daftar iklan suara yang telah dibuat dan di-generate.</p>
                         </div>
-                        <button onclick="clearHistory()" class="text-xs text-rose-400 hover:underline">Hapus Semua History</button>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -1167,8 +1163,8 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         </div>
     </div>
 
-    <!-- Global Toast Notification UI (Top-Right Position, Fixed Uniform Width, Queue Mode) -->
-    <div id="toast-container" class="fixed top-6 right-6 pointer-events-none z-50 flex flex-col items-end justify-start p-2 gap-2.5"></div>
+    <!-- Global Toast Notification UI (Top-Right Position, Compact & Responsive) -->
+    <div id="toast-container" class="fixed top-4 right-4 sm:top-5 sm:right-5 pointer-events-none z-50 flex flex-col items-end justify-start gap-2 max-w-[calc(100vw-2rem)] sm:max-w-xs"></div>
 
     <!-- Application Script Logic -->
     <script>
@@ -1563,9 +1559,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             updateDeleteTemplateButton();
 
             postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
-                if (success) {
-                    showToast("Template Iklan disimpan ke Google Sheet!", "success");
-                } else {
+                if (!success) {
                     showToast("Template tersimpan lokal (Cek URL Google Sheet di Settings).", "warning");
                 }
             });
@@ -1708,9 +1702,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 closeTemplateForm();
 
                 postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
-                    if (success) {
-                        showToast("Template baru disimpan ke Google Sheet!", "success");
-                    } else {
+                    if (!success) {
                         showToast("Template tersimpan lokal (Cek URL Sheet di Settings).", "warning");
                     }
                 });
@@ -1744,6 +1736,8 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
         function copyScriptText() {
             const text = document.getElementById('ad-script-input').value;
             if(!text) return showToast("Script masih kosong!", "warning");
+            const textarea = document.getElementById('ad-script-input');
+            textarea.select();
             document.execCommand('copy');
             showToast("Script berhasil disalin ke clipboard!", "info");
         }
@@ -1761,6 +1755,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
             updateScriptStats();
             showToast("CTA Toko ditambahkan!", "success");
         }
+
         async function saveBrandingConfig() {
             const branding = {
                 name: document.getElementById('brand-name').value.trim(),
@@ -1783,9 +1778,7 @@ Stok terbatas, segera hubungi Turja Computer."></textarea>
                 btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan';
             }
 
-            if (success) {
-                showToast("Branding Toko berhasil disimpan ke tab 'Branding' Google Sheet!", "success");
-            } else {
+            if (!success) {
                 showToast("Branding tersimpan lokal. Isi URL Web App Google Sheet di menu Settings untuk sync cloud.", "warning");
             }
         }
@@ -2052,9 +2045,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             updateDeleteTemplateButton();
 
             postToGoogleSheet({ action: 'addTemplate', template: newTemplate }).then(success => {
-                if (success) {
-                    showToast(`Template "${titleLabel}" disimpan ke Google Sheet!`, "success");
-                } else {
+                if (!success) {
                     showToast(`Template "${titleLabel}" tersimpan lokal (Cek URL Sheet di Settings).`, "warning");
                 }
             });
@@ -2406,6 +2397,20 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
         let currentHistoryAudio = null;
         let currentPlayingHistoryId = null;
 
+        // Mengonversi tautan Google Drive menjadi direct stream/download URL jika memungkinkan
+        function resolvePlayableAudioUrl(url) {
+            if (!url) return "";
+            const driveFileMatch = url.match(/drive\.google\.com\/file\/d\/([^\/?#]+)/);
+            if (driveFileMatch && driveFileMatch[1]) {
+                return `https://drive.google.com/uc?export=download&id=${driveFileMatch[1]}`;
+            }
+            const driveOpenMatch = url.match(/drive\.google\.com\/open\?id=([^&#]+)/);
+            if (driveOpenMatch && driveOpenMatch[1]) {
+                return `https://drive.google.com/uc?export=download&id=${driveOpenMatch[1]}`;
+            }
+            return url;
+        }
+
         async function playHistoryAudio(id) {
             const item = historyData.find(h => String(h.id) === String(id));
             if (!item) return;
@@ -2421,19 +2426,20 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
             try {
                 let playableUrl = "";
+                let isLocalBlobOrData = false;
 
                 if (audioSource) {
+                    isLocalBlobOrData = true;
                     if (audioSource.startsWith('data:')) {
                         playableUrl = audioSource;
                     } else if (audioSource.startsWith('RIFF') || audioSource.length > 100) {
-                        // Jika tersimpan sebagai raw string / binary base64
                         const blob = new Blob([base64ToArrayBuffer(audioSource)], { type: 'audio/wav' });
                         playableUrl = URL.createObjectURL(blob);
                     } else {
                         playableUrl = 'data:audio/wav;base64,' + audioSource;
                     }
                 } else if (item.audioUrl) {
-                    playableUrl = item.audioUrl;
+                    playableUrl = resolvePlayableAudioUrl(item.audioUrl);
                 }
 
                 if (!playableUrl) {
@@ -2449,7 +2455,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                 }
 
                 currentHistoryAudio = new Audio();
-                currentHistoryAudio.crossOrigin = "anonymous";
                 currentPlayingHistoryId = id;
 
                 const btn = document.getElementById(`btn-play-hist-${id}`);
@@ -2459,39 +2464,48 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
                     stopHistoryAudio();
                 };
 
-                currentHistoryAudio.onerror = async (e) => {
-                    console.warn("Fallback HTML5 Audio, mencoba decode via Web Audio Context...", e);
-                    try {
-                        if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                        const response = await fetch(playableUrl);
-                        const arrayBuffer = await response.arrayBuffer();
-                        const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                        
-                        currentAudioBuffer = decodedBuffer;
-                        playAudioBuffer();
-                        currentPlayingHistoryId = id;
-                        if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i>';
-                        return;
-                    } catch (err2) {
-                        console.error("Semua metode pemutaran gagal:", err2);
-                        stopHistoryAudio();
-                        if (item.fullScript) {
-                            document.getElementById('ad-script-input').value = item.fullScript;
-                            updateScriptStats();
-                            switchTab('generator');
-                            showToast("Format audio lama tidak dapat diputar. Script dimuat kembali ke Generator.", "warning");
-                        } else {
-                            showToast("Gagal memutar audio.", "error");
+                currentHistoryAudio.onerror = async () => {
+                    // Coba decode manual hanya jika sumber adalah data/blob lokal (hindari CORS fetch ke Drive)
+                    if (isLocalBlobOrData) {
+                        try {
+                            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            const response = await fetch(playableUrl);
+                            const arrayBuffer = await response.arrayBuffer();
+                            const decodedBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                            
+                            currentAudioBuffer = decodedBuffer;
+                            playAudioBuffer();
+                            currentPlayingHistoryId = id;
+                            if (btn) btn.innerHTML = '<i class="fa-solid fa-stop text-amber-400"></i>';
+                            return;
+                        } catch (err2) {
+                            // Lanjut ke fallback script di bawah
                         }
+                    }
+
+                    stopHistoryAudio();
+                    if (item.fullScript) {
+                        document.getElementById('ad-script-input').value = item.fullScript;
+                        updateScriptStats();
+                        switchTab('generator');
+                        showToast("Audio cloud tidak dapat diputar langsung. Script dimuat kembali ke Generator!", "info");
+                    } else {
+                        showToast("Gagal memutar audio.", "error");
                     }
                 };
 
                 currentHistoryAudio.src = playableUrl;
                 await currentHistoryAudio.play();
             } catch (e) {
-                console.error(e);
                 stopHistoryAudio();
-                showToast("Gagal memutar audio.", "error");
+                if (item.fullScript) {
+                    document.getElementById('ad-script-input').value = item.fullScript;
+                    updateScriptStats();
+                    switchTab('generator');
+                    showToast("Audio tidak dapat diputar langsung. Script dimuat ke Generator!", "info");
+                } else {
+                    showToast("Gagal memutar audio.", "error");
+                }
             }
         }
 
@@ -2574,14 +2588,6 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             renderHistoryTable();
             renderDashboardHistory();
             postToGoogleSheet({ action: 'clearHistory' });
-        }
-
-        function clearHistory() {
-            historyData = [];
-            localStorage.removeItem('tc_voice_history');
-            renderHistoryTable();
-            renderDashboardHistory();
-            postToGoogleSheet({ action: 'clearHistory' });
             showToast("Semua riwayat dibersihkan.", "info");
         }
 
@@ -2605,9 +2611,7 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
             renderProfiles();
             
             postToGoogleSheet({ action: 'addProfile', profile: profile }).then(success => {
-                if(success) {
-                    showToast("Voice Profile berhasil disimpan & disinkronkan ke Google Sheet!", "success");
-                } else {
+                if(!success) {
                     showToast("Profile tersimpan lokal (Gagal sync Sheet, cek URL Web App)", "warning");
                 }
             });
@@ -2815,10 +2819,10 @@ Hanya tampilkan hasil script bersih siap dibaca voice over.`;
 
             const cfg = configs[type] || configs.info;
 
-            toast.className = `pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-xl border ${cfg.border} ${cfg.bg} backdrop-blur-xl shadow-2xl transition-all duration-300 animate-toast-pop w-80 h-auto shrink-0`;
+            toast.className = `pointer-events-auto inline-flex items-center gap-2 px-3 py-2 rounded-xl border ${cfg.border} ${cfg.bg} backdrop-blur-xl shadow-xl transition-all duration-300 animate-toast-pop w-fit max-w-full`;
             toast.innerHTML = `
-                <i class="${cfg.icon} text-base shrink-0 mt-0.5"></i>
-                <span class="text-xs font-medium text-slate-200 leading-snug flex-1 break-words">${message}</span>
+                <i class="${cfg.icon} text-xs shrink-0"></i>
+                <span class="text-[11px] font-medium text-slate-200 leading-tight line-clamp-2">${message}</span>
             `;
             
             container.appendChild(toast);
